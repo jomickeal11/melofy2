@@ -29,3 +29,16 @@ Date : 09 Mai 2026
 =========================================================
 Fichier généré par l'Assistant IA - Melofy Project
 =========================================================
+
+5. HISTORIQUE DES FICHIERS MODIFIÉS (Cette session)
+---------------------------------------------------------
+- [x] pages/api/payments/maketou/confirm.js  (Logique de paiement)
+- [x] lib/supabase.js                        (Sécurité du build Vercel)
+- [x] rapport_corrections_paiement.txt       (Documentation)
+- [x] scratch/check_db.js                    (Outil diagnostic)
+- [x] scratch/check_maketou.js               (Outil diagnostic)
+- [x] scratch/find_lost_credits.js           (Outil diagnostic)
+- [x] scratch/setup_rpc.js                   (Outil diagnostic)
+
+---------------------------------------------------------
+Dernière mise à jour : 09 Mai 2026 - 12:42 (UTC)
