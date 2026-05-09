@@ -67,7 +67,7 @@ create policy "songs: créer"           on songs for insert with check (auth.uid
 create policy "songs: modifier"        on songs for update using (auth.uid() = user_id);
 
 create policy "orders: voir les siennes" on orders for select using (auth.uid() = user_id);
-create policy "orders: créer"            on orders for insert with check (auth.uid() = user_id);
+-- Suppression de la politique d'insertion utilisateur pour plus de sécurité (géré via API)
 
 -- Politiques RLS
 create policy "profiles: voir le sien"   on profiles for select using (auth.uid() = id);
