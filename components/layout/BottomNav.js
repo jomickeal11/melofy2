@@ -33,8 +33,14 @@ export default function BottomNav() {
   const router = useRouter()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 md:hidden z-50 flex justify-around items-center px-2 py-2 safe-area-bottom fixed-stable"
-      style={{ background: 'rgba(13,13,20,0.6)', backdropFilter: 'blur(16px)', borderTop: '1px solid rgba(255,255,255,0.06)', bottom: 0 }}>
+    <nav className="fixed bottom-0 left-0 right-0 md:hidden z-50 flex justify-around items-center px-2 fixed-stable"
+      style={{ 
+        background: 'rgba(13,13,20,0.85)', 
+        backdropFilter: 'blur(20px)', 
+        borderTop: '1px solid rgba(255,255,255,0.08)',
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)',
+        paddingTop: '12px'
+      }}>
       {tabs.map(({ href, label, Icon }) => {
         const active = router.pathname === href
         return (
