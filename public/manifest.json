@@ -1,0 +1,22 @@
+{
+  "name": "Melofy",
+  "short_name": "Melofy",
+  "description": "Créez votre musique personnalisée avec l'IA",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0d0d14",
+  "theme_color": "#6C63FF",
+  "icons": [
+    {
+      "src": "/logo-square.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo-square.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

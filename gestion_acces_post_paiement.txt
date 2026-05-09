@@ -1,0 +1,152 @@
+=========================================================
+MELOFY - HISTORIQUE DES ACTIONS & GESTION DES ACCÈS POST-PAIEMENT
+=========================================================
+
+1. ACTIONS RÉALISÉES
+---------------------------------------------------------
+Aujourd'hui, nous avons développé la fonctionnalité de partage de chansons.
+- Création de la page de partage publique : pages/s/[id].js
+- La page est accessible à tous, sans connexion, via un lien unique.
+- Utilisation de getServerSideProps avec la clé de service de Supabase (SUPABASE_SERVICE_ROLE_KEY) pour contourner les politiques de sécurité (RLS) spécifiquement pour la récupération du morceau à écouter publiquement.
+- Ajout d'un lecteur audio premium avec une barre de progression interactive, d'une section optionnelle de paroles, d'une fonctionnalité de copie de lien, de partage WhatsApp et d'un téléchargement MP3 direct.
+
+2. GESTION DES ACCÈS APRÈS PAIEMENT (PLAN OU CRÉDITS)
+---------------------------------------------------------
+Le schéma actuel (supabase-schema.sql) possède déjà une table `profiles` pour gérer les droits d'accès :
+- plan : 'free' (par défaut) ou 'premium'
+- credits : nombre de chansons restantes (par défaut 3)
+
+Voici comment gérer l'accès après un paiement confirmé (par ex. CinetPay ou Stripe).
+
+A. Mettre à jour le profil dans le Webhook ou l'API de confirmation
+-------------------------------------------------------------------
+Lorsqu'un paiement est validé par le fournisseur, ton API de confirmation doit mettre à jour les colonnes `plan` ou `credits` de l'utilisateur concerné.
+
+```javascript
+import { createClient } from '@supabase/supabase-js'
+
+// Initialiser Supabase avec la clé Service Role pour modifier les profils
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+)
+
+// Exemple de mise à jour pour un abonnement Premium
+const { error } = await supabaseAdmin
+  .from('profiles')
+  .update({ plan: 'premium' })
+  .eq('id', userId)
+
+// Exemple de mise à jour pour un achat de crédits (ex: ajouter 5 crédits)
+const { data: currentProfile } = await supabaseAdmin
+  .from('profiles')
+  .select('credits')
+  .eq('id', userId)
+  .single()
+
+const newCredits = (currentProfile?.credits || 0) + 5
+
+await supabaseAdmin
+  .from('profiles')
+  .update({ credits: newCredits })
+  .eq('id', userId)
+```
+
+B. Restreindre l'accès à une fonctionnalité côté Frontend (Next.js)
+-------------------------------------------------------------------
+Avant d'afficher un bouton ou de permettre une action (par exemple générer une chanson ou la télécharger en haute qualité), vérifie le profil de l'utilisateur :
+
+```javascript
+import { useEffect, useState } from 'react'
+import { supabase } from '../lib/supabase'
+
+export default function MaPage() {
+  const [profile, setProfile] = useState(null)
+
+  useEffect(() => {
+    async function loadProfile() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single()
+        setProfile(data)
+      }
+    }
+    loadProfile()
+  }, [])
+
+  const canCreate = profile && (profile.plan === 'premium' || profile.credits > 0)
+
+  return (
+    <div>
+      {canCreate ? (
+        <button onClick={handleGeneration}>Créer une chanson</button>
+      ) : (
+        <div className="upgrade-box">
+          <p>Vous n'avez plus de crédits.</p>
+          <button onClick={goToPricing}>Passer au Premium</button>
+        </div>
+      )}
+    </div>
+  )
+}
+```
+
+C. Sécuriser et valider l'accès côté Backend (Next.js API Routes)
+-----------------------------------------------------------------
+Il est essentiel de re-vérifier les droits sur l'API avant d'appeler l'IA ou d'effectuer une action pour empêcher toute manipulation côté client :
+
+```javascript
+import { createClient } from '@supabase/supabase-js'
+
+export default async function handler(req, res) {
+  // 1. Récupérer l'utilisateur connecté via l'Authorization Header
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    { global: { headers: { Authorization: req.headers.authorization || '' } } }
+  )
+
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  if (userError || !user) return res.status(401).json({ error: 'Non autorisé' })
+
+  // 2. Lire son profil avec la clé Service Role (ou en activant la bonne politique RLS)
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  )
+
+  const { data: profile } = await supabaseAdmin
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single()
+
+  // 3. Vérifier le plan ou le crédit
+  if (profile.plan !== 'premium' && profile.credits <= 0) {
+    return res.status(403).json({ error: 'Crédits insuffisants. Veuillez recharger.' })
+  }
+
+  // 4. Déduire 1 crédit si applicable
+  if (profile.plan !== 'premium') {
+    await supabaseAdmin
+      .from('profiles')
+      .update({ credits: profile.credits - 1 })
+      .eq('id', user.id)
+  }
+
+  // 5. Continuer le traitement (ex: Appel à l'IA pour générer la chanson)
+  return res.status(200).json({ success: true })
+}
+```
+
+3. LOGIQUE OPTION A : DÉBIT EN AMONT ET REMBOURSEMENT SI ÉCHEC
+-----------------------------------------------------------------
+Pour Melofy, nous avons choisi l'Option A pour la génération de chansons :
+- L'utilisateur est débité de 1 crédit dès qu'il clique sur "Générer" (`pages/api/generate.js`).
+- Si l'appel API vers ai33.pro échoue immédiatement (dans le bloc `catch`), le crédit de l'utilisateur est recrédité.
+- Si la tâche est lancée avec succès, mais échoue plus tard lors du polling (`pages/api/status.js`), le statut du morceau passe à 'failed' et l'utilisateur est remboursé de 1 crédit.
+

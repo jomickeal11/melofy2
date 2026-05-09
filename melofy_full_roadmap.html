@@ -1,0 +1,282 @@
+
+<h2 class="sr-only">Roadmap complète de Melofy — toutes les fonctionnalités jusqu'au lancement et au-delà</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:4px 0 16px}
+.phase{margin-bottom:10px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.ph{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;background:var(--color-background-secondary);user-select:none}
+.ph:hover{background:var(--color-background-tertiary)}
+.pnum{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.ptitle{font-size:14px;font-weight:500;color:var(--color-text-primary);flex:1}
+.ptag{font-size:11px;padding:2px 9px;border-radius:20px;font-weight:500;flex-shrink:0}
+.chev{font-size:11px;color:var(--color-text-tertiary);transition:transform 0.2s;flex-shrink:0}
+.body{display:none;border-top:0.5px solid var(--color-border-tertiary)}
+.body.open{display:block}
+.feat{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer}
+.feat:last-child{border-bottom:none}
+.feat:hover .fl{color:var(--color-text-info)}
+.fdot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.fc{flex:1}
+.fl{font-size:13px;color:var(--color-text-secondary);font-weight:500;line-height:1.4}
+.fd{font-size:12px;color:var(--color-text-tertiary);margin-top:2px;line-height:1.5}
+.ftag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:10px;margin-top:4px;font-weight:500}
+</style>
+<div class="wrap">
+
+<div class="phase" id="p1">
+  <div class="ph" onclick="tog(1)">
+    <div class="pnum" style="background:#EEEDFE;color:#534AB7">1</div>
+    <div class="ptitle">Auth & comptes utilisateurs</div>
+    <div class="ptag" style="background:#EEEDFE;color:#534AB7">À faire maintenant</div>
+    <div class="chev" id="c1">▼</div>
+  </div>
+  <div class="body" id="b1">
+    <div class="feat" onclick="sendPrompt('Génère la page login et signup pour Melofy avec Supabase Auth')">
+      <div class="fdot" style="background:#7F77DD"></div>
+      <div class="fc"><div class="fl">Page login / signup</div><div class="fd">Email + mot de passe. Redirection après connexion. Gestion des erreurs.</div><span class="ftag" style="background:#EEEDFE;color:#534AB7">pages/login.js</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment gérer la session utilisateur dans toutes les pages Next.js avec Supabase ?')">
+      <div class="fdot" style="background:#7F77DD"></div>
+      <div class="fc"><div class="fl">Session persistante</div><div class="fd">Vérifier si l'utilisateur est connecté sur chaque page. Redirection si non connecté.</div><span class="ftag" style="background:#EEEDFE;color:#534AB7">lib/useUser.js</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment ajouter la connexion Google OAuth avec Supabase dans Next.js ?')">
+      <div class="fdot" style="background:#7F77DD"></div>
+      <div class="fc"><div class="fl">Connexion Google (OAuth)</div><div class="fd">1 clic pour s'inscrire avec Google. Bien plus de conversions.</div><span class="ftag" style="background:#EEEDFE;color:#534AB7">Supabase OAuth</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment faire la réinitialisation de mot de passe avec Supabase ?')">
+      <div class="fdot" style="background:#7F77DD"></div>
+      <div class="fc"><div class="fl">Reset mot de passe</div><div class="fd">Email de réinitialisation envoyé automatiquement par Supabase.</div><span class="ftag" style="background:#EEEDFE;color:#534AB7">pages/reset.js</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="p2">
+  <div class="ph" onclick="tog(2)">
+    <div class="pnum" style="background:#E1F5EE;color:#0F6E56">2</div>
+    <div class="ptitle">Génération & suivi des chansons</div>
+    <div class="ptag" style="background:#E1F5EE;color:#0F6E56">À faire maintenant</div>
+    <div class="chev" id="c2">▼</div>
+  </div>
+  <div class="body" id="b2">
+    <div class="feat" onclick="sendPrompt('Comment faire le polling du statut de génération ai33.pro dans Next.js ?')">
+      <div class="fdot" style="background:#1D9E75"></div>
+      <div class="fc"><div class="fl">Polling du statut de génération</div><div class="fd">Vérifier toutes les 5s si la chanson est prête. Afficher une barre de progression animée pendant l'attente.</div><span class="ftag" style="background:#E1F5EE;color:#0F6E56">pages/api/status.js</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment sauvegarder un MP3 depuis une URL externe vers Supabase Storage ?')">
+      <div class="fdot" style="background:#1D9E75"></div>
+      <div class="fc"><div class="fl">Sauvegarde du MP3 dans Supabase Storage</div><div class="fd">Une fois généré, télécharger le fichier ai33.pro et le stocker définitivement dans Supabase Storage.</div><span class="ftag" style="background:#E1F5EE;color:#0F6E56">pages/api/save-audio.js</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment créer un lecteur audio personnalisé en React avec barre de progression ?')">
+      <div class="fdot" style="background:#1D9E75"></div>
+      <div class="fc"><div class="fl">Lecteur audio complet</div><div class="fd">Play/pause, barre de progression cliquable, durée, volume. Lecteur persistant en bas de page.</div><span class="ftag" style="background:#E1F5EE;color:#0F6E56">components/ui/Player.js</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment générer un lien de partage public unique par chanson dans Next.js ?')">
+      <div class="fdot" style="background:#1D9E75"></div>
+      <div class="fc"><div class="fl">Page de partage publique</div><div class="fd">Lien unique melofy.com/s/[id] accessible sans compte. Bouton écouter + télécharger + partager sur WhatsApp.</div><span class="ftag" style="background:#E1F5EE;color:#0F6E56">pages/s/[id].js</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment permettre le téléchargement d\'un fichier MP3 depuis Supabase Storage ?')">
+      <div class="fdot" style="background:#1D9E75"></div>
+      <div class="fc"><div class="fl">Téléchargement MP3</div><div class="fd">Bouton download sur chaque chanson. Lien signé Supabase Storage avec expiration.</div><span class="ftag" style="background:#E1F5EE;color:#0F6E56">API route</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="p3">
+  <div class="ph" onclick="tog(3)">
+    <div class="pnum" style="background:#FAEEDA;color:#633806">3</div>
+    <div class="ptitle">Paiement & crédits</div>
+    <div class="ptag" style="background:#FAEEDA;color:#633806">Semaine 2-3</div>
+    <div class="chev" id="c3">▼</div>
+  </div>
+  <div class="body" id="b3">
+    <div class="feat" onclick="sendPrompt('Comment intégrer CinetPay dans Next.js pour accepter Wave et Orange Money ?')">
+      <div class="fdot" style="background:#BA7517"></div>
+      <div class="fc"><div class="fl">CinetPay — Wave, Orange Money, MTN</div><div class="fd">Paiement mobile money adapté à l'Afrique de l'Ouest. Confirmation automatique via webhook.</div><span class="ftag" style="background:#FAEEDA;color:#633806">pages/api/payment.js</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment intégrer Stripe dans Next.js pour les paiements par carte ?')">
+      <div class="fdot" style="background:#BA7517"></div>
+      <div class="fc"><div class="fl">Stripe — carte bancaire internationale</div><div class="fd">Pour les utilisateurs hors Afrique. Checkout Stripe hébergé + webhooks.</div><span class="ftag" style="background:#FAEEDA;color:#633806">Stripe Checkout</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment créer un système de crédits dans Supabase pour Melofy ?')">
+      <div class="fdot" style="background:#BA7517"></div>
+      <div class="fc"><div class="fl">Système de crédits</div><div class="fd">1 crédit = 1 chanson. Déduire à la génération. Recharger après paiement. Afficher le solde partout.</div><span class="ftag" style="background:#FAEEDA;color:#633806">Table credits</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment créer une page de tarification pour Melofy avec différents packs ?')">
+      <div class="fdot" style="background:#BA7517"></div>
+      <div class="fc"><div class="fl">Page tarification</div><div class="fd">Pack 1 chanson / 5 chansons / abonnement mensuel illimité. Tableau comparatif Free vs Premium.</div><span class="ftag" style="background:#FAEEDA;color:#633806">pages/pricing.js</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment envoyer un email de confirmation après paiement avec Resend dans Next.js ?')">
+      <div class="fdot" style="background:#BA7517"></div>
+      <div class="fc"><div class="fl">Email de confirmation paiement</div><div class="fd">Email automatique après achat avec reçu et crédits ajoutés. Via Resend (gratuit).</div><span class="ftag" style="background:#FAEEDA;color:#633806">Resend API</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="p4">
+  <div class="ph" onclick="tog(4)">
+    <div class="pnum" style="background:#FAECE7;color:#712B13">4</div>
+    <div class="ptitle">Expérience utilisateur avancée</div>
+    <div class="ptag" style="background:#FAECE7;color:#712B13">Semaine 3-4</div>
+    <div class="chev" id="c4">▼</div>
+  </div>
+  <div class="body" id="b4">
+    <div class="feat" onclick="sendPrompt('Comment ajouter un système de favoris pour les chansons dans Supabase ?')">
+      <div class="fdot" style="background:#D85A30"></div>
+      <div class="fc"><div class="fl">Favoris & organisation</div><div class="fd">Cœur pour mettre en favori. Filtres : Toutes / Favoris / Téléchargées. Tri par date ou style.</div><span class="ftag" style="background:#FAECE7;color:#712B13">UX</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment ajouter une fonctionnalité de regénération de chanson dans Melofy ?')">
+      <div class="fdot" style="background:#D85A30"></div>
+      <div class="fc"><div class="fl">Regénérer une chanson</div><div class="fd">Bouton "Regénérer" sur une chanson existante. Garde les paroles et style, génère une nouvelle version.</div><span class="ftag" style="background:#FAECE7;color:#712B13">1 crédit</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment ajouter des notifications in-app dans Next.js avec Supabase Realtime ?')">
+      <div class="fdot" style="background:#D85A30"></div>
+      <div class="fc"><div class="fl">Notifications in-app</div><div class="fd">Alerte quand la chanson est prête. Badge sur la cloche. Liste des notifs dans un panneau.</div><span class="ftag" style="background:#FAECE7;color:#712B13">Supabase Realtime</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment ajouter un historique des paiements dans Supabase pour Melofy ?')">
+      <div class="fdot" style="background:#D85A30"></div>
+      <div class="fc"><div class="fl">Historique des paiements</div><div class="fd">Liste de toutes les transactions avec date, montant, statut. Téléchargeable en PDF.</div><span class="ftag" style="background:#FAECE7;color:#712B13">pages/payments.js</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment créer un système de parrainage avec codes de réduction dans Supabase ?')">
+      <div class="fdot" style="background:#D85A30"></div>
+      <div class="fc"><div class="fl">Parrainage — inviter des amis</div><div class="fd">Lien unique par utilisateur. Parrain gagne 1 crédit quand l'ami crée sa première chanson.</div><span class="ftag" style="background:#FAECE7;color:#712B13">Croissance</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment ajouter un système de partage WhatsApp pour une chanson Melofy ?')">
+      <div class="fdot" style="background:#D85A30"></div>
+      <div class="fc"><div class="fl">Partage WhatsApp & réseaux sociaux</div><div class="fd">Bouton "Envoyer sur WhatsApp" avec lien pré-rempli. Partage sur Instagram, TikTok, Facebook.</div><span class="ftag" style="background:#FAECE7;color:#712B13">Viral</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="p5">
+  <div class="ph" onclick="tog(5)">
+    <div class="pnum" style="background:#E6F1FB;color:#0C447C">5</div>
+    <div class="ptitle">Admin & gestion</div>
+    <div class="ptag" style="background:#E6F1FB;color:#0C447C">Semaine 4-5</div>
+    <div class="chev" id="c5">▼</div>
+  </div>
+  <div class="body" id="b5">
+    <div class="feat" onclick="sendPrompt('Comment créer un dashboard admin pour Melofy avec Next.js et Supabase ?')">
+      <div class="fdot" style="background:#378ADD"></div>
+      <div class="fc"><div class="fl">Dashboard admin</div><div class="fd">Chansons du jour, revenus, utilisateurs actifs, taux de succès des générations. Graphiques simples.</div><span class="ftag" style="background:#E6F1FB;color:#0C447C">pages/admin/index.js</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment créer une page de gestion des utilisateurs dans le dashboard admin de Melofy ?')">
+      <div class="fdot" style="background:#378ADD"></div>
+      <div class="fc"><div class="fl">Gestion des utilisateurs</div><div class="fd">Liste des users, crédits restants, historique chansons. Ajouter des crédits manuellement.</div><span class="ftag" style="background:#E6F1FB;color:#0C447C">Admin only</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment créer une page de gestion des commandes dans le dashboard admin de Melofy ?')">
+      <div class="fdot" style="background:#378ADD"></div>
+      <div class="fc"><div class="fl">Gestion des commandes</div><div class="fd">Toutes les générations avec statut. Relancer manuellement une génération échouée.</div><span class="ftag" style="background:#E6F1FB;color:#0C447C">Admin only</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment protéger les routes admin avec Supabase dans Next.js ?')">
+      <div class="fdot" style="background:#378ADD"></div>
+      <div class="fc"><div class="fl">Protection des routes admin</div><div class="fd">Seul toi (admin) peut accéder au dashboard. Vérification du rôle dans Supabase.</div><span class="ftag" style="background:#E6F1FB;color:#0C447C">Sécurité</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment configurer des alertes email quand une génération échoue dans Melofy ?')">
+      <div class="fdot" style="background:#378ADD"></div>
+      <div class="fc"><div class="fl">Alertes en cas d'erreur</div><div class="fd">Email automatique si une génération échoue ou si un paiement est refusé. Via Resend.</div><span class="ftag" style="background:#E6F1FB;color:#0C447C">Monitoring</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="p6">
+  <div class="ph" onclick="tog(6)">
+    <div class="pnum" style="background:#EAF3DE;color:#3B6D11">6</div>
+    <div class="ptitle">SEO & marketing</div>
+    <div class="ptag" style="background:#EAF3DE;color:#3B6D11">Semaine 5-6</div>
+    <div class="chev" id="c6">▼</div>
+  </div>
+  <div class="body" id="b6">
+    <div class="feat" onclick="sendPrompt('Comment optimiser le SEO d\'une app Next.js avec les meta tags et Open Graph ?')">
+      <div class="fdot" style="background:#639922"></div>
+      <div class="fc"><div class="fl">SEO — méta tags & Open Graph</div><div class="fd">Titre, description, image pour chaque page. Quand on partage un lien Melofy sur WhatsApp, ça affiche un beau aperçu.</div><span class="ftag" style="background:#EAF3DE;color:#3B6D11">next/head</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment créer un sitemap.xml dynamique dans Next.js ?')">
+      <div class="fdot" style="background:#639922"></div>
+      <div class="fc"><div class="fl">Sitemap & robots.txt</div><div class="fd">Google peut indexer toutes les pages publiques de Melofy. Généré automatiquement.</div><span class="ftag" style="background:#EAF3DE;color:#3B6D11">pages/sitemap.xml.js</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment ajouter Google Analytics dans Next.js ?')">
+      <div class="fdot" style="background:#639922"></div>
+      <div class="fc"><div class="fl">Google Analytics</div><div class="fd">Voir d'où viennent les visiteurs, quelles pages ils visitent, combien créent une chanson.</div><span class="ftag" style="background:#EAF3DE;color:#3B6D11">Gratuit</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment créer une landing page convaincante pour Melofy ?')">
+      <div class="fdot" style="background:#639922"></div>
+      <div class="fc"><div class="fl">Landing page publique</div><div class="fd">Page d'accueil pour les visiteurs non connectés. Hero fort, exemples audio, prix, témoignages.</div><span class="ftag" style="background:#EAF3DE;color:#3B6D11">Conversion</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment créer une page de blog dans Next.js pour le SEO de Melofy ?')">
+      <div class="fdot" style="background:#639922"></div>
+      <div class="fc"><div class="fl">Blog / articles SEO</div><div class="fd">Articles sur les occasions : "idée cadeau anniversaire maman", "chanson mariage originale"...</div><span class="ftag" style="background:#EAF3DE;color:#3B6D11">Trafic organique</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="p7">
+  <div class="ph" onclick="tog(7)">
+    <div class="pnum" style="background:#FBEAF0;color:#993556">7</div>
+    <div class="ptitle">Déploiement & lancement</div>
+    <div class="ptag" style="background:#FBEAF0;color:#993556">Semaine 6-7</div>
+    <div class="chev" id="c7">▼</div>
+  </div>
+  <div class="body" id="b7">
+    <div class="feat" onclick="sendPrompt('Comment déployer Melofy sur Vercel étape par étape ?')">
+      <div class="fdot" style="background:#D4537E"></div>
+      <div class="fc"><div class="fl">Déploiement Vercel</div><div class="fd">Connecter le repo GitHub à Vercel. Variables d'environnement. Déploiement automatique à chaque push.</div><span class="ftag" style="background:#FBEAF0;color:#993556">vercel.com</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment configurer un nom de domaine personnalisé sur Vercel ?')">
+      <div class="fdot" style="background:#D4537E"></div>
+      <div class="fc"><div class="fl">Nom de domaine</div><div class="fd">Acheter melofy.com ou melofy.africa. Configurer DNS sur Vercel. HTTPS automatique.</div><span class="ftag" style="background:#FBEAF0;color:#993556">Namecheap / Porkbun</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Quels tests faire avant de lancer Melofy en production ?')">
+      <div class="fdot" style="background:#D4537E"></div>
+      <div class="fc"><div class="fl">Tests avant lancement</div><div class="fd">Tester le flow complet : inscription → création → paiement → partage. Sur mobile et desktop.</div><span class="ftag" style="background:#FBEAF0;color:#993556">QA</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment configurer Sentry pour monitorer les erreurs de Melofy en production ?')">
+      <div class="fdot" style="background:#D4537E"></div>
+      <div class="fc"><div class="fl">Monitoring des erreurs</div><div class="fd">Sentry.io gratuit pour capturer et alerter sur les erreurs en production.</div><span class="ftag" style="background:#FBEAF0;color:#993556">Sentry</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" id="p8">
+  <div class="ph" onclick="tog(8)">
+    <div class="pnum" style="background:#F1EFE8;color:#5F5E5A">8</div>
+    <div class="ptitle">Après lancement — croissance</div>
+    <div class="ptag" style="background:#F1EFE8;color:#5F5E5A">Mois 2+</div>
+    <div class="chev" id="c8">▼</div>
+  </div>
+  <div class="body" id="b8">
+    <div class="feat" onclick="sendPrompt('Comment ajouter des notifications email avec Resend dans Next.js ?')">
+      <div class="fdot" style="background:#888780"></div>
+      <div class="fc"><div class="fl">Emails automatiques</div><div class="fd">Email de bienvenue à l'inscription. Rappel si l'utilisateur n'a pas créé de chanson depuis 7 jours.</div><span class="ftag" style="background:#F1EFE8;color:#5F5E5A">Resend</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment créer un système de codes promo dans Melofy ?')">
+      <div class="fdot" style="background:#888780"></div>
+      <div class="fc"><div class="fl">Codes promo</div><div class="fd">Créer des codes de réduction pour les campagnes marketing. Ex: NOEL2025 = 2 chansons offertes.</div><span class="ftag" style="background:#F1EFE8;color:#5F5E5A">Table promo_codes</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment ajouter un système de galerie publique dans Melofy ?')">
+      <div class="fdot" style="background:#888780"></div>
+      <div class="fc"><div class="fl">Galerie publique</div><div class="fd">Page Explorer avec les chansons partagées publiquement. Filtrables par style. Social proof fort.</div><span class="ftag" style="background:#F1EFE8;color:#5F5E5A">pages/explore.js</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment transformer Melofy en PWA installable sur mobile ?')">
+      <div class="fdot" style="background:#888780"></div>
+      <div class="fc"><div class="fl">PWA — installable sur mobile</div><div class="fd">Ajouter à l'écran d'accueil comme une vraie app. Icône, splash screen, mode hors-ligne partiel.</div><span class="ftag" style="background:#F1EFE8;color:#5F5E5A">next-pwa</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment ajouter un abonnement mensuel illimité dans Melofy avec Stripe ?')">
+      <div class="fdot" style="background:#888780"></div>
+      <div class="fc"><div class="fl">Abonnement mensuel Premium</div><div class="fd">Paiement récurrent. Génération illimitée. Qualité audio supérieure. Téléchargements sans watermark.</div><span class="ftag" style="background:#F1EFE8;color:#5F5E5A">Stripe Subscriptions</span></div>
+    </div>
+    <div class="feat" onclick="sendPrompt('Comment créer une API publique pour Melofy ?')">
+      <div class="fdot" style="background:#888780"></div>
+      <div class="fc"><div class="fl">API publique Melofy</div><div class="fd">Permettre à d'autres développeurs d'intégrer Melofy dans leurs apps. Clés API, documentation.</div><span class="ftag" style="background:#F1EFE8;color:#5F5E5A">Long terme</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+function tog(n){
+  const b=document.getElementById('b'+n)
+  const c=document.getElementById('c'+n)
+  const open=b.classList.toggle('open')
+  c.style.transform=open?'rotate(180deg)':''
+}
+</script>
