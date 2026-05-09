@@ -1,0 +1,31 @@
+
+=========================================================
+MELOFY - RAPPORT DE CORRECTIONS & OPTIMISATION PAIEMENT
+=========================================================
+
+Date : 09 Mai 2026
+
+1. PROBLÈMES RÉSOLUS
+---------------------------------------------------------
+- Échec de l'attribution des crédits : Le système bloquait les transactions déjà marquées "paid" même si les crédits n'avaient pas été réellement ajoutés.
+- Montants à 0 FCFA : L'API Maketou ne renvoyait pas le montant dans la session, causant une erreur de validation.
+- Build Vercel échoué : L'initialisation du client Supabase au moment du build sans variables d'environnement faisait planter la compilation.
+
+2. MODIFICATIONS APPORTÉES (confirm.js)
+---------------------------------------------------------
+- Nouvelle logique d'idempotence : Le système vérifie maintenant la colonne 'credits_awarded'. Si elle est à 0, il procède à l'ajout des crédits même si le statut est déjà "paid".
+- Source de vérité locale pour les prix : Utilisation de la constante 'PRICES' pour enregistrer le montant réel dans la table 'orders'.
+- Inversion de l'ordre de traitement : Les crédits sont ajoutés AVANT de clôturer techniquement la transaction pour garantir le service au client.
+
+3. SÉCURISATION DU CLIENT (lib/supabase.js)
+---------------------------------------------------------
+- Ajout de gardes-fous (fallbacks) pour éviter que l'application ne crash si les variables NEXT_PUBLIC_SUPABASE_URL ou NEXT_PUBLIC_SUPABASE_ANON_KEY sont absentes lors du build Vercel.
+
+4. NOTE SUR LE WEBHOOK
+---------------------------------------------------------
+- Confirmé : Maketou ne supporte pas de Webhook configurable par l'utilisateur.
+- Stratégie : Tout repose sur 'confirm.js'. Un mécanisme de récupération automatique au chargement du Dashboard est recommandé pour traiter les sessions restées en 'pending' suite à une fermeture prématurée du navigateur.
+
+=========================================================
+Fichier généré par l'Assistant IA - Melofy Project
+=========================================================
