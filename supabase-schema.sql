@@ -68,8 +68,16 @@ create policy "songs: modifier"        on songs for update using (auth.uid() = u
 create policy "orders: voir les siennes" on orders for select using (auth.uid() = user_id);
 create policy "orders: créer"            on orders for insert with check (auth.uid() = user_id);
 
+-- Politiques RLS
 create policy "profiles: voir le sien"   on profiles for select using (auth.uid() = id);
-create policy "profiles: modifier"       on profiles for update using (auth.uid() = id);
+
+-- Empêcher l'utilisateur de modifier ses crédits ou son plan
+create policy "profiles: modifier son propre profil" on profiles 
+for update using (auth.uid() = id)
+with check (
+  (old.credits = new.credits) AND 
+  (old.plan = new.plan)
+);
 
 -- Créer le bucket de stockage audio
 insert into storage.buckets (id, name, public) values ('audio', 'audio', true)
