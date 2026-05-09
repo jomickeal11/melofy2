@@ -40,6 +40,7 @@ Fichier généré par l'Assistant IA - Melofy Project
 - [x] pages/api/admin/stats.js               (Sécurité Admin)
 - [x] pages/api/admin/update-credits.js      (Sécurité Admin)
 - [x] pages/api/generate.js                  (Rate Limiting 10s)
+- [x] components/layout/BottomNav.js       (Stabilisation UI mobile)
 - [x] rapport_corrections_paiement.txt       (Documentation)
 - [x] scratch/check_db.js                    (Outil diagnostic)
 - [x] scratch/check_maketou.js               (Outil diagnostic)
@@ -47,4 +48,4 @@ Fichier généré par l'Assistant IA - Melofy Project
 - [x] scratch/setup_rpc.js                   (Outil diagnostic)
 
 ---------------------------------------------------------
-Dernière mise à jour : 09 Mai 2026 - 18:07 (UTC)
+Dernière mise à jour : 09 Mai 2026 - 18:11 (UTC)
