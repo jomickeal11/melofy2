@@ -37,6 +37,7 @@ create table if not exists profiles (
   avatar_url   text,
   plan         text default 'free', -- free | premium
   credits      integer default 1,
+  is_admin     boolean default false,
   has_invited  boolean default false,
   created_at   timestamptz default now()
 );

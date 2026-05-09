@@ -18,9 +18,14 @@ export default async function handler(req, res) {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError || !user) return res.status(401).json({ error: 'Non autorisé' })
 
-    // Sécurité : Seuls les admins ou emails admin autorisés
-    const isAdmin = user.email && (user.email.includes('admin') || user.email.endsWith('@melofy.com') || user.email.endsWith('@melofy.africa'))
-    if (!isAdmin) return res.status(403).json({ error: 'Accès refusé. Vous devez être administrateur.' })
+    // Vérifier si l'utilisateur est admin via la colonne is_admin
+    const { data: profile } = await supabaseAdmin
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile?.is_admin) return res.status(403).json({ error: 'Accès refusé : Droits administrateur requis' })
 
     // 1. Chansons
     const { data: songsData } = await supabaseAdmin
