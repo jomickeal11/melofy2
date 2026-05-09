@@ -36,7 +36,7 @@ Fichier généré par l'Assistant IA - Melofy Project
 - [x] lib/supabase.js                        (Sécurité du build Vercel)
 - [x] public/manifest.json                   (Correction logo PWA)
 - [x] pages/_app.js                          (Lien icône Apple)
-- [x] supabase-schema.sql                    (Sécurité RLS Profiles + is_admin + Orders)
+- [x] supabase-schema.sql                    (Sécurité RLS Profiles + is_admin + Orders + Songs)
 - [x] pages/api/admin/stats.js               (Sécurité Admin)
 - [x] pages/api/admin/update-credits.js      (Sécurité Admin)
 - [x] rapport_corrections_paiement.txt       (Documentation)
@@ -46,4 +46,4 @@ Fichier généré par l'Assistant IA - Melofy Project
 - [x] scratch/setup_rpc.js                   (Outil diagnostic)
 
 ---------------------------------------------------------
-Dernière mise à jour : 09 Mai 2026 - 18:03 (UTC)
+Dernière mise à jour : 09 Mai 2026 - 18:04 (UTC)

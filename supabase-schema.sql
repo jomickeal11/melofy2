@@ -85,6 +85,7 @@ with check (
 insert into storage.buckets (id, name, public) values ('audio', 'audio', true)
 on conflict do nothing;
 
-create policy "audio: upload"  on storage.objects for insert with check (bucket_id = 'audio');
-create policy "audio: lecture" on storage.objects for select using (bucket_id = 'audio');
+-- Politiques de stockage (Bucket 'audio')
+-- L'upload est réservé au serveur (Service Role), aucune règle insert pour le public.
+create policy "audio: lecture publique" on storage.objects for select using (bucket_id = 'audio');
 alter table orders add constraint orders_payment_ref_key unique (payment_ref);
