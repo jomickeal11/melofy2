@@ -1,4 +1,4 @@
-﻿import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js'
 import { getMusicProvider } from '../../lib/music-provider'
 
 const STYLE_IDEAS = {
@@ -113,7 +113,24 @@ export default async function handler(req, res) {
 
   const { data: profile, error: profileError } = await supabaseAdmin.from('profiles').select('credits').eq('id', user.id).single()
   if (profileError || !profile) return res.status(400).json({ error: 'Profil introuvable. Veuillez contacter le support.' })
-  if ((profile.credits ?? 0) <= 0) return res.status(403).json({ error: 'Vous n\'avez plus de crÃ©dits. Veuillez en acheter pour continuer.' })
+  if ((profile.credits ?? 0) <= 0) return res.status(403).json({ error: 'Vous n\'avez plus de crédits. Veuillez en acheter pour continuer.' })
+
+  // --- SÉCURITÉ : RATE LIMITING (Anti-spam) ---
+  const { data: lastSong } = await supabaseAdmin
+    .from('songs')
+    .select('created_at')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (lastSong) {
+    const lastCreation = new Date(lastSong.created_at).getTime()
+    const diffSeconds = (Date.now() - lastCreation) / 1000
+    if (diffSeconds < 10) {
+      return res.status(429).json({ error: `Veuillez patienter encore ${Math.ceil(10 - diffSeconds)} secondes avant la prochaine génération.` })
+    }
+  }
 
   const { error: updateError } = await supabaseAdmin.from('profiles').update({ credits: profile.credits - 1 }).eq('id', user.id)
   if (updateError) return res.status(500).json({ error: 'Erreur lors de l\'utilisation de votre crÃ©dit.' })
