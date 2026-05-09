@@ -64,7 +64,8 @@ alter table profiles enable row level security;
 -- Politiques RLS (chaque user voit seulement ses données, et tout le monde voit les chansons prêtes)
 create policy "songs: voir les siennes ou prêtes" on songs for select using (auth.uid() = user_id or status = 'ready');
 create policy "songs: créer"           on songs for insert with check (auth.uid() = user_id);
-create policy "songs: modifier"        on songs for update using (auth.uid() = user_id);
+create policy "songs: modifier"        on songs for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "songs: supprimer"       on songs for delete using (auth.uid() = user_id);
 
 create policy "orders: voir les siennes" on orders for select using (auth.uid() = user_id);
 -- Suppression de la politique d'insertion utilisateur pour plus de sécurité (géré via API)
