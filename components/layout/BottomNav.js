@@ -43,12 +43,37 @@ export default function BottomNav() {
       }}>
       {tabs.map(({ href, label, Icon }) => {
         const active = router.pathname === href
+        const isCreate = href === '/create'
+
         return (
           <Link key={href} href={href}
-            className="flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-all"
-            style={{ color: active ? '#6C63FF' : 'rgba(255,255,255,0.4)' }}>
-            <Icon />
-            <span style={{ fontSize: 10, fontWeight: active ? 500 : 400 }}>{label}</span>
+            className="flex flex-col items-center transition-all"
+            style={{ 
+              color: active ? '#6C63FF' : 'rgba(255,255,255,0.4)',
+              position: 'relative',
+              padding: isCreate ? '0' : '4px 12px',
+              marginTop: isCreate ? '4px' : '0' // On le descend un peu ici
+            }}>
+            {isCreate ? (
+              <div className="flex flex-col items-center gap-1">
+                <div style={{
+                  width: 48, height: 48, borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #6C63FF, #a855f7)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 4px 15px rgba(108,99,255,0.4)',
+                  marginBottom: 2,
+                  color: '#fff'
+                }}>
+                  <Icon />
+                </div>
+                <span style={{ fontSize: 10, fontWeight: 600, color: '#fff' }}>{label}</span>
+              </div>
+            ) : (
+              <>
+                <Icon />
+                <span style={{ fontSize: 10, fontWeight: active ? 600 : 400 }}>{label}</span>
+              </>
+            )}
           </Link>
         )
       })}
