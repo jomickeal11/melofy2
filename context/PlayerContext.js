@@ -147,8 +147,20 @@ export const PlayerProvider = ({ children }) => {
     }
   }, [currentSong, isPlaying])
 
+  const [volume, setVolume] = useState(1)
   const [playlist, setPlaylist] = useState([])
   const [currentIndex, setCurrentIndex] = useState(-1)
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume
+    }
+  }, [volume])
+
+  const changeVolume = (val) => {
+    const v = Math.max(0, Math.min(1, val))
+    setVolume(v)
+  }
 
   const playSong = (song, currentPlaylist = []) => {
     if (!audioRef.current || !song) return
@@ -177,6 +189,8 @@ export const PlayerProvider = ({ children }) => {
 
       audioRef.current.src = song.audio_url || song.audio
       audioRef.current.load()
+      // S'assurer que le volume est appliqué au nouvel audio
+      audioRef.current.volume = volume
       audioRef.current.play().catch(e => {
         console.error("Playback failed:", e)
         setIsPlaying(false)
@@ -237,8 +251,8 @@ export const PlayerProvider = ({ children }) => {
 
   return (
     <PlayerContext.Provider value={{
-      currentSong, isPlaying, progress, duration, currentTime, playlist, currentIndex,
-      playSong, togglePlay, stopPlayer, seek, playNext, playPrevious
+      currentSong, isPlaying, progress, duration, currentTime, playlist, currentIndex, volume,
+      playSong, togglePlay, stopPlayer, seek, playNext, playPrevious, setVolume: changeVolume
     }}>
       {children}
     </PlayerContext.Provider>

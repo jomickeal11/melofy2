@@ -59,10 +59,9 @@ export async function getServerSideProps(context) {
 }
 
 export default function SongSharePage({ song, recommendations, appUrl, error }) {
-  const { currentSong, isPlaying, progress, duration, currentTime, playSong, seek, playNext, playPrevious, playlist, currentIndex } = usePlayer()
+  const { currentSong, isPlaying, progress, duration, currentTime, playSong, seek, playNext, playPrevious, playlist, currentIndex, volume, setVolume } = usePlayer()
   const [hasMounted, setHasMounted] = useState(false)
   const [copied, setCopied] = useState(false)
-  const [volume, setVolume] = useState(1)
   const [lang, setLang] = useState('FR')
 
   useEffect(() => {
@@ -89,7 +88,6 @@ export default function SongSharePage({ song, recommendations, appUrl, error }) 
   const handleVolumeChange = (e) => {
     const val = parseFloat(e.target.value)
     setVolume(val)
-    // Le volume global n'est pas encore dans le contexte, mais on pourra l'ajouter plus tard
   }
 
   // Déterminer quelle chanson afficher (celle du lien ou celle en cours de lecture si c'est une recommandation)
