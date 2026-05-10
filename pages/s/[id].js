@@ -92,8 +92,12 @@ export default function SongSharePage({ song, recommendations, appUrl, error }) 
     // Le volume global n'est pas encore dans le contexte, mais on pourra l'ajouter plus tard
   }
 
-  let imageUrl = song?.image_url || '';
-  let rawLyrics = song?.lyrics || '';
+  // Déterminer quelle chanson afficher (celle du lien ou celle en cours de lecture si c'est une recommandation)
+  const isCurrentInDiscovery = playlist?.some(s => s.id === currentSong?.id)
+  const displaySong = (isCurrentInDiscovery && currentSong) ? currentSong : song
+
+  let imageUrl = displaySong?.image_url || '';
+  let rawLyrics = displaySong?.lyrics || '';
   if (typeof rawLyrics === 'string' && rawLyrics.startsWith('[IMAGE:')) {
     const closingIdx = rawLyrics.indexOf(']');
     if (closingIdx !== -1) {
@@ -193,14 +197,14 @@ export default function SongSharePage({ song, recommendations, appUrl, error }) 
             {/* Info Area */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#6C63FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#fff' }}>
-                {song.title ? song.title[0].toUpperCase() : 'M'}
+                {displaySong.title ? displaySong.title[0].toUpperCase() : 'M'}
               </div>
               <span style={{ fontSize: 13, color: '#fff', fontWeight: 500 }}>Melofy</span>
             </div>
 
             <div style={{ textAlign: 'center', maxWidth: 600 }}>
               <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 32, color: '#fff', margin: '0 0 12px 0', letterSpacing: '-0.02em' }}>
-                {song.title || 'Ma Chanson'}
+                {displaySong.title || 'Ma Chanson'}
               </h1>
               
               {/* Style below title - subtle version */}
@@ -212,7 +216,7 @@ export default function SongSharePage({ song, recommendations, appUrl, error }) 
                   textTransform: 'uppercase', 
                   letterSpacing: '0.08em'
                 }}>
-                  {song.style || 'Acoustique'}
+                  {displaySong.style || 'Acoustique'}
                 </span>
               </div>
 
@@ -258,7 +262,7 @@ export default function SongSharePage({ song, recommendations, appUrl, error }) 
                     </button>
 
                     {/* Main Play/Pause */}
-                    <button onClick={() => playSong(song, [song, ...(recommendations || [])])} style={{ 
+                    <button onClick={() => playSong(displaySong, [song, ...(recommendations || [])])} style={{ 
                       width: 80, height: 80, borderRadius: '50%', 
                       background: 'linear-gradient(135deg, #6C63FF, #a855f7)', 
                       border: 'none', color: '#fff', display: 'flex', 
@@ -266,7 +270,7 @@ export default function SongSharePage({ song, recommendations, appUrl, error }) 
                       cursor: 'pointer', transition: 'transform 0.15s',
                       boxShadow: '0 10px 30px rgba(108, 99, 255, 0.3)'
                     }}>
-                      {(isPlaying && currentSong?.id === song.id) ? (
+                      {(isPlaying && currentSong?.id === displaySong.id) ? (
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
                       ) : (
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 4 }}><polygon points="5,3 19,12 5,21" /></svg>
