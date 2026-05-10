@@ -346,6 +346,8 @@ export default function SongsPage() {
             )}
 
           </div>
+          {/* Spacer for mobile nav/player */}
+          <div className="pb-player-safe h-0" />
         </main>
 
         <Modal 

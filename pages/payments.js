@@ -222,6 +222,8 @@ export default function PaymentsPage() {
                 ))}
               </div>
             )}
+            {/* Spacer for mobile nav/player */}
+            <div className="pb-player-safe h-0" />
           </div>
         </main>
       </div>

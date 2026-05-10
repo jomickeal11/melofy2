@@ -306,6 +306,9 @@ export default function Home() {
                 })}
               </div>
             </section>
+            
+            {/* Spacer for mobile nav/player */}
+            <div className="pb-player-safe h-0" />
           </div>
         </main>
       </div>
