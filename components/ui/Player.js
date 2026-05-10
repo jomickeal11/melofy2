@@ -27,27 +27,27 @@ export default function Player() {
 
   return (
     <div className={`player-container ${isMainPage ? 'has-mobile-nav' : ''}`} style={{
-      position: 'fixed', bottom: isMainPage ? 84 : 20, 
+      position: 'fixed', bottom: isMainPage ? 'calc(env(safe-area-inset-bottom, 0px) + 68px)' : '20px', 
       left: '50%', transform: 'translateX(-50%)',
-      width: 'calc(100% - 32px)', maxWidth: 500,
-      background: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(20px)',
+      width: 'calc(100% - 24px)', maxWidth: 500,
+      background: 'rgba(15, 23, 42, 0.92)', backdropFilter: 'blur(24px)',
       border: '1px solid rgba(255, 255, 255, 0.1)',
-      padding: '10px 20px', zIndex: 1000,
+      padding: '8px 12px 8px 16px', zIndex: 1000,
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
-      borderRadius: 24,
+      borderRadius: 20,
       transition: 'all 0.3s ease',
       overflow: 'hidden'
     }}>
       {/* Song Info */}
-      <Link href={`/s/${currentSong.id}`} style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0, textDecoration: 'none' }}>
+      <Link href={`/s/${currentSong.id}`} style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0, textDecoration: 'none' }}>
         <div style={{
-          width: 40, height: 40, borderRadius: 8,
+          width: 42, height: 42, borderRadius: 10,
           background: currentSong.image_url ? `url(${currentSong.image_url}) center/cover` : 'linear-gradient(135deg, #6C63FF, #a855f7)',
           flexShrink: 0, boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
         }} />
-        <div style={{ minWidth: 0 }}>
-          <div style={{ color: '#fff', fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <div style={{ color: '#fff', fontSize: 14, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             {currentSong.title || 'Melofy Track'}
           </div>
           <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -107,17 +107,6 @@ export default function Player() {
         }} />
       </div>
 
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        @media (max-width: 768px) {
-          .player-container.has-mobile-nav {
-            bottom: calc(85px + env(safe-area-inset-bottom)) !important;
-            margin: 0 10px 10px 10px;
-            border-radius: 16px;
-            padding: 8px 12px 12px 12px !important;
-          }
-        }
-      ` }} />
     </div>
   )
 }
