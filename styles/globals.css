@@ -102,11 +102,12 @@ button, a {
 }
 
 .pb-player-safe {
-    padding-bottom: 200px !important;
+    padding-bottom: 220px !important;
 }
 
 @media (min-width: 769px) {
     .pb-player-safe {
-        padding-bottom: 140px !important;
+        padding-bottom: 150px !important;
     }
 }
+
