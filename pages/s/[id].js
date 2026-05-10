@@ -37,8 +37,8 @@ export async function getServerSideProps(context) {
       }
     }
 
-    // On récupère aussi quelques chansons pour la découverte
-    const recommendations = await getDiscoverySongs(id, 5)
+    // On récupère aussi 2 chansons aléatoires pour la découverte (total 3 chansons)
+    const recommendations = await getDiscoverySongs(id, 2)
 
     return {
       props: {
