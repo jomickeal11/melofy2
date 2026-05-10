@@ -36,7 +36,7 @@ export default function Player() {
       overflow: 'hidden'
     }}>
       {/* Song Info */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0 }}>
+      <Link href={`/s/${currentSong.id}`} style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0, textDecoration: 'none' }}>
         <div style={{
           width: 40, height: 40, borderRadius: 8,
           background: currentSong.image_url ? `url(${currentSong.image_url}) center/cover` : 'linear-gradient(135deg, #6C63FF, #a855f7)',
@@ -50,7 +50,7 @@ export default function Player() {
             {currentSong.style || 'AI Generated'}
           </div>
         </div>
-      </div>
+      </Link>
 
       {/* Controls */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
