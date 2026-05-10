@@ -201,7 +201,7 @@ export default function SongSharePage({ song, recommendations, appUrl, error }) 
             </div>
 
             <div style={{ textAlign: 'center', maxWidth: 600 }}>
-              <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 32, color: '#fff', margin: '0 0 12px 0', letterSpacing: '-0.02em' }}>
+              <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 26, color: '#fff', margin: '0 0 12px 0', letterSpacing: '-0.02em' }}>
                 {displaySong.title || 'Ma Chanson'}
               </h1>
               
