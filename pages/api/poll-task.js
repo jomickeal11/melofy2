@@ -19,14 +19,22 @@ function normalizeAi33Tracks(taskData, fallbackMeta = {}) {
   const candidates = [meta?.music_result?.data, taskData?.music_result?.data, taskData?.result?.data, meta?.result?.data, meta?.result, taskData?.result]
   for (const candidate of candidates) {
     if (Array.isArray(candidate) && candidate.length > 0) {
-      const tracks = candidate.map((item, idx) => ({
-        id: item?.music_id || item?.id || `${taskId}-${idx}`,
-        title: item?.title || '',
-        audio_url: item?.audio_url || item?.audio || item?.url || '',
-        image_url: item?.cover_url || item?.image_url || item?.image || '',
-        duration: item?.duration || 0,
-        lyrics: item?.lyrics || meta?.lyrics || fallbackMeta?.lyrics || '',
-      })).filter(track => track.audio_url)
+      const tracks = candidate.map((item, idx) => {
+        // Priorité au titre de l'IA, sinon titre utilisateur, sinon par défaut
+        let finalTitle = item?.title || item?.name || fallbackMeta?.title || ''
+        if (finalTitle === 'Nouvelle chanson' || finalTitle === 'Untitled') {
+           finalTitle = item?.title || item?.name || finalTitle
+        }
+
+        return {
+          id: item?.music_id || item?.id || `${taskId}-${idx}`,
+          title: finalTitle,
+          audio_url: item?.audio_url || item?.audio || item?.url || '',
+          image_url: item?.cover_url || item?.image_url || item?.image || '',
+          duration: item?.duration || 0,
+          lyrics: item?.lyrics || meta?.lyrics || fallbackMeta?.lyrics || '',
+        }
+      }).filter(track => track.audio_url)
       if (tracks.length > 0) return tracks
     }
   }
@@ -76,15 +84,20 @@ function normalizeSunoTracks(payload, fallbackMeta = {}) {
   const taskData = payload?.data || payload || {}
   const response = taskData?.response || {}
   const rawTracks = Array.isArray(response?.sunoData) ? response.sunoData : []
-  return rawTracks.map((item, idx) => ({
-    id: item?.id || `${taskData?.taskId || fallbackMeta?.taskId || 'suno'}-${idx}`,
-    title: item?.title || fallbackMeta?.title || '',
-    audio_url: item?.audioUrl || item?.streamAudioUrl || '',
-    stream_audio_url: item?.streamAudioUrl || '',
-    image_url: item?.imageUrl || '',
-    duration: item?.duration || 0,
-    lyrics: item?.prompt || fallbackMeta?.lyrics || ''
-  })).filter(track => track.audio_url)
+  return rawTracks.map((item, idx) => {
+    // Priorité au titre généré par Suno
+    const finalTitle = item?.title || fallbackMeta?.title || ''
+
+    return {
+      id: item?.id || `${taskData?.taskId || fallbackMeta?.taskId || 'suno'}-${idx}`,
+      title: finalTitle,
+      audio_url: item?.audioUrl || item?.streamAudioUrl || '',
+      stream_audio_url: item?.streamAudioUrl || '',
+      image_url: item?.imageUrl || '',
+      duration: item?.duration || 0,
+      lyrics: item?.prompt || fallbackMeta?.lyrics || ''
+    }
+  }).filter(track => track.audio_url)
 }
 
 function summarizeSunoPayload(payload) {

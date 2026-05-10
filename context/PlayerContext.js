@@ -17,13 +17,19 @@ export const PlayerProvider = ({ children }) => {
       audioRef.current = audio
       
       const updateProgress = () => {
-        const d = audio.duration
+        let d = audio.duration
+        
+        // Si la durée est Infinity (souvent sur iPhone/AI33), on essaie de la récupérer
+        if (d === Infinity && currentSong?.duration > 0) {
+          d = currentSong.duration
+        }
+
         if (d && d !== Infinity && !isNaN(d)) {
           setDuration(d)
-          setCurrentTime(audio.currentTime || 0)
-          setProgress((audio.currentTime / d) * 100 || 0)
+          const current = audio.currentTime || 0
+          setCurrentTime(current)
+          setProgress((current / d) * 100 || 0)
         } else {
-          // Si la durée n'est pas encore là, on met quand même à jour le temps actuel
           setCurrentTime(audio.currentTime || 0)
         }
       }
@@ -109,9 +115,14 @@ export const PlayerProvider = ({ children }) => {
     if (isPlaying && audioRef.current) {
       interval = setInterval(() => {
         const audio = audioRef.current;
-        const d = audio.duration;
+        let d = audio.duration;
         const c = audio.currentTime;
         
+        // Fallback pour durée Infinity
+        if (d === Infinity && currentSong?.duration > 0) {
+          d = currentSong.duration
+        }
+
         setCurrentTime(c || 0);
         if (d && d !== Infinity && !isNaN(d)) {
           setDuration(d);
