@@ -27,13 +27,16 @@ export default function Player() {
 
   return (
     <div className={`player-container ${isMainPage ? 'has-mobile-nav' : ''}`} style={{
-      position: 'fixed', bottom: 0, left: 0, right: 0,
-      background: 'rgba(15, 23, 42, 0.95)', backdropFilter: 'blur(24px)',
-      border: '1px solid rgba(255, 255, 255, 0.08)',
-      padding: '8px 16px 12px 16px', zIndex: 1000,
+      position: 'fixed', bottom: isMainPage ? 84 : 20, 
+      left: '50%', transform: 'translateX(-50%)',
+      width: 'calc(100% - 32px)', maxWidth: 500,
+      background: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(20px)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      padding: '10px 20px', zIndex: 1000,
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      boxShadow: '0 -10px 40px rgba(0,0,0,0.6)',
-      transition: 'bottom 0.3s ease',
+      boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+      borderRadius: 24,
+      transition: 'all 0.3s ease',
       overflow: 'hidden'
     }}>
       {/* Song Info */}
