@@ -134,7 +134,7 @@ export const PlayerProvider = ({ children }) => {
   }, [isPlaying]);
 
   useEffect(() => {
-    if ('mediaSession' in navigator && currentSong) {
+    if ('mediaSession' in navigator && currentSong && typeof MediaMetadata !== 'undefined') {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: currentSong.title || 'Melofy Track',
         artist: currentSong.style || 'AI Generated',
