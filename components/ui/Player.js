@@ -14,7 +14,7 @@ export default function Player() {
   if (!mounted || !currentSong) return null
 
   // Détecter si on est sur une page qui affiche la barre de navigation mobile
-  const isMainPage = ['/dashboard', '/create', '/songs', '/payments', '/profile', '/pricing'].includes(router.pathname)
+  const isMainPage = ['/dashboard', '/create', '/songs', '/payments', '/profile'].includes(router.pathname)
 
   // Si on n'est pas sur une page principale, on ne veut pas afficher l'interface du lecteur
   // Mais comme le composant reste "monté" dans _app.js, la musique continue.
