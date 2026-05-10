@@ -142,7 +142,7 @@ export default function Sidebar({ user, profile }) {
     : user?.email?.[0]?.toUpperCase() || 'U'
 
   const t = SIDEBAR_T[lang] || SIDEBAR_T.FR
-  const isMainPage = ['/dashboard', '/create', '/songs', '/payments', '/profile'].includes(router.pathname)
+  const isMainPage = ['/dashboard', '/songs', '/payments', '/profile', '/invite', '/pricing'].includes(router.pathname)
 
   const clearNotifications = () => {
     setNotifications([])
