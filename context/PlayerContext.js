@@ -138,9 +138,6 @@ export const PlayerProvider = ({ children }) => {
 
   const [playlist, setPlaylist] = useState([])
   const [currentIndex, setCurrentIndex] = useState(-1)
-  const audioRef = useRef(null)
-
-  // ... (audio setup logic remains same)
 
   const playSong = (song, currentPlaylist = []) => {
     if (!audioRef.current || !song) return
