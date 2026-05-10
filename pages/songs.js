@@ -325,6 +325,7 @@ export default function SongsPage() {
                 {displayedSongs.map(song => (
                   <SongCard
                     key={song.id} song={song}
+                    playlist={displayedSongs}
                     isSelected={selectedSongs.includes(song.id)}
                     isDownloaded={downloadedIds.includes(song.id)}
                     onDownload={() => markAsDownloaded([song.id])}

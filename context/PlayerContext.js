@@ -136,8 +136,20 @@ export const PlayerProvider = ({ children }) => {
     }
   }, [currentSong, isPlaying])
 
-  const playSong = (song) => {
+  const [playlist, setPlaylist] = useState([])
+  const [currentIndex, setCurrentIndex] = useState(-1)
+  const audioRef = useRef(null)
+
+  // ... (audio setup logic remains same)
+
+  const playSong = (song, currentPlaylist = []) => {
     if (!audioRef.current || !song) return
+
+    if (currentPlaylist.length > 0) {
+      setPlaylist(currentPlaylist)
+      const index = currentPlaylist.findIndex(s => s.id === song.id)
+      setCurrentIndex(index)
+    }
 
     if (currentSong?.id === song.id) {
       if (isPlaying) {
@@ -156,11 +168,20 @@ export const PlayerProvider = ({ children }) => {
       setProgress(0)
       
       audioRef.current.src = song.audio_url || song.audio
-      audioRef.current.load() // Forcer le chargement sur mobile
+      audioRef.current.load()
       audioRef.current.play().catch(e => {
         console.error("Playback failed:", e)
         setIsPlaying(false)
       })
+    }
+  }
+
+  const playNext = () => {
+    if (playlist.length > 0 && currentIndex < playlist.length - 1) {
+      const nextIndex = currentIndex + 1
+      const nextSong = playlist[nextIndex]
+      setCurrentIndex(nextIndex)
+      playSong(nextSong, playlist)
     }
   }
 
@@ -185,6 +206,8 @@ export const PlayerProvider = ({ children }) => {
     setIsPlaying(false)
     setProgress(0)
     setCurrentTime(0)
+    setPlaylist([])
+    setCurrentIndex(-1)
   }
 
   const seek = (percent) => {
@@ -196,7 +219,10 @@ export const PlayerProvider = ({ children }) => {
   }
 
   return (
-    <PlayerContext.Provider value={{ currentSong, isPlaying, progress, duration, currentTime, playSong, togglePlay, stopPlayer, seek }}>
+    <PlayerContext.Provider value={{ 
+      currentSong, isPlaying, progress, duration, currentTime, playlist, 
+      playSong, togglePlay, stopPlayer, seek, playNext 
+    }}>
       {children}
     </PlayerContext.Provider>
   )

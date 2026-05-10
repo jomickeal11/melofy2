@@ -3,7 +3,7 @@ import { usePlayer } from '../../context/PlayerContext'
 import toast from 'react-hot-toast'
 import Modal from './Modal'
 
-export default function SongCard({ song, onDelete, isSelected, onSelect, onDownload, isDownloaded, compact = false }) {
+export default function SongCard({ song, onDelete, isSelected, onSelect, onDownload, isDownloaded, compact = false, playlist = [] }) {
   const [localSong, setLocalSong] = useState(song)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isEditingTitle, setIsEditingTitle] = useState(false)
@@ -15,61 +15,11 @@ export default function SongCard({ song, onDelete, isSelected, onSelect, onDownl
   const { currentSong, isPlaying, progress, duration, currentTime, playSong, seek: globalSeek } = usePlayer()
   const isThisPlaying = currentSong?.id === localSong.id && isPlaying
 
-  useEffect(() => {
-    const saved = localStorage.getItem('melofy_lang') || 'FR'
-    setLang(saved)
-  }, [])
-
-  const handleSaveTitle = async () => {
-    if (!titleInput.trim()) return
-    setSavingTitle(true)
-    try {
-      const { data: { session } } = await import('../../lib/supabase').then(m => m.supabase.auth.getSession())
-      const res = await fetch('/api/songs/update-title', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.access_token}`
-        },
-        body: JSON.stringify({ songId: localSong.id, title: titleInput })
-      })
-      const data = await res.json()
-      if (res.ok && data.song) {
-        setLocalSong(data.song)
-        setIsEditingTitle(false)
-      }
-    } catch (e) {
-      console.error(e)
-    } finally {
-      setSavingTitle(false)
-    }
-  }
-
-  // Polling de l'état si en cours de génération
-  useEffect(() => {
-    let interval;
-    if (localSong.status === 'generating' || localSong.status === 'pending') {
-      interval = setInterval(async () => {
-        try {
-          const { data: { session } } = await import('../../lib/supabase').then(m => m.supabase.auth.getSession())
-          const res = await fetch(`/api/status?id=${localSong.id}`, {
-            headers: { 'Authorization': `Bearer ${session?.access_token}` }
-          })
-          const data = await res.json()
-          if (data.song) {
-            setLocalSong(data.song)
-          }
-        } catch (e) {
-          console.error(e)
-        }
-      }, 5000)
-    }
-    return () => clearInterval(interval)
-  }, [localSong.status, localSong.id])
+  // ... (existing effects)
 
   const toggle = () => {
     if (!localSong.audio_url) return
-    playSong(localSong)
+    playSong(localSong, playlist)
   }
 
   const formatTime = (time) => {

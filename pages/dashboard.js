@@ -250,7 +250,7 @@ export default function Home() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {recentSongs.length > 0 ? (
                   recentSongs.map(song => (
-                    <SongCard key={song.id} song={song} isSelected={false} onSelect={() => window.location.href = '/songs'} compact={true} />
+                    <SongCard key={song.id} song={song} playlist={recentSongs} isSelected={false} onSelect={() => window.location.href = '/songs'} compact={true} />
                   ))
                 ) : (
                   <div style={{ padding: '40px 20px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: 20, border: '1px dashed rgba(108,99,255,0.2)' }}>
