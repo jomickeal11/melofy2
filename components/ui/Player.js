@@ -33,12 +33,29 @@ export default function Player() {
       boxShadow: '0 -10px 30px rgba(0,0,0,0.5)',
       transition: 'bottom 0.3s ease'
     }}>
-      {/* Song Info */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
+      {/* Progress Bar at the very top of the player */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: 2,
+        background: 'rgba(255,255,255,0.05)', cursor: 'pointer'
+      }} onClick={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect()
+        const x = e.clientX - rect.left
+        const percent = (x / rect.width) * 100
+        seek(percent)
+      }}>
         <div style={{
-          width: 40, height: 40, borderRadius: 8,
+          height: '100%', width: `${progress}%`,
+          background: 'linear-gradient(90deg, #6C63FF, #22D3EE)',
+          boxShadow: '0 0 8px rgba(34, 211, 238, 0.4)'
+        }} />
+      </div>
+
+      {/* Song Info */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1, minWidth: 0, paddingRight: 10 }}>
+        <div style={{
+          width: 38, height: 38, borderRadius: 6,
           background: currentSong.image_url ? `url(${currentSong.image_url}) center/cover` : 'linear-gradient(135deg, #6C63FF, #a855f7)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.2)', flexShrink: 0
+          flexShrink: 0
         }} />
         <div style={{ minWidth: 0 }}>
           <div style={{ color: '#fff', fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -50,14 +67,13 @@ export default function Player() {
         </div>
       </div>
 
-      {/* Controls & Progress */}
-      <div style={{ flex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, padding: '0 10px' }}>
+      {/* Controls */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <button onClick={togglePlay} style={{
-          width: 34, height: 34, borderRadius: '50%', background: '#fff',
+          width: 40, height: 40, borderRadius: '50%', background: '#fff',
           border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          cursor: 'pointer', transition: 'transform 0.15s'
-        }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
-          onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+          cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+        }}>
           {isPlaying ? (
             <svg width="18" height="18" viewBox="0 0 24 24" fill="#0F172A"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
           ) : (
@@ -65,29 +81,9 @@ export default function Player() {
           )}
         </button>
 
-        <div style={{ width: '100%', maxWidth: 300, display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{
-            flex: 1, height: 3, background: 'rgba(255,255,255,0.1)',
-            borderRadius: 2, position: 'relative', cursor: 'pointer'
-          }} onClick={(e) => {
-            const rect = e.currentTarget.getBoundingClientRect()
-            const x = e.clientX - rect.left
-            const percent = (x / rect.width) * 100
-            seek(percent)
-          }}>
-            <div style={{
-              position: 'absolute', top: 0, left: 0, height: '100%',
-              width: `${progress}%`, background: '#6C63FF', borderRadius: 2
-            }} />
-          </div>
-        </div>
-      </div>
-
-      {/* Close button */}
-      <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', order: 3 }}>
         <button onClick={stopPlayer} style={{
-          background: 'rgba(255,255,255,0.05)', border: 'none',
-          width: 28, height: 28, borderRadius: '50%',
+          background: 'rgba(255,255,255,0.06)', border: 'none',
+          width: 32, height: 32, borderRadius: '50%',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           color: 'rgba(255,255,255,0.4)', cursor: 'pointer'
         }}>
@@ -99,11 +95,14 @@ export default function Player() {
         __html: `
         @media (max-width: 768px) {
           .player-container.has-mobile-nav {
-            bottom: calc(76px + env(safe-area-inset-bottom)) !important;
-            border-top: 1px solid rgba(108, 99, 255, 0.2);
-          }
-          .player-container {
-            padding: 8px 16px !important;
+            bottom: calc(90px + env(safe-area-inset-bottom)) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 12px !important;
+            margin: 0 12px 10px 12px;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.9) !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            border: 1px solid rgba(108, 99, 255, 0.15);
           }
         }
       ` }} />
