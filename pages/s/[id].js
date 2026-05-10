@@ -69,15 +69,6 @@ export default function SongSharePage({ song, recommendations, appUrl, error }) 
     setHasMounted(true)
     const saved = localStorage.getItem('melofy_lang') || 'FR'
     setLang(saved)
-
-    // Initialiser la playlist si elle est vide ou si on arrive sur une nouvelle chanson de partage
-    if (song && (!playlist.length || !playlist.find(s => s.id === song.id))) {
-      const fullPlaylist = [song, ...(recommendations || [])]
-      // On ne joue pas automatiquement pour ne pas surprendre l'utilisateur, 
-      // mais on prépare la liste
-      const { playSong: silentInit } = usePlayer.getState ? { playSong: () => {} } : { playSong: null } 
-      // En fait on va juste utiliser playSong(song, fullPlaylist) au premier clic
-    }
   }, [song])
 
   if (error) {
