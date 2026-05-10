@@ -185,9 +185,9 @@ export default function SongSharePage({ song, recommendations, appUrl, error }) 
               border: '1px solid rgba(255,255,255,0.08)',
               boxShadow: '0 16px 48px rgba(0,0,0,0.4)', overflow: 'hidden', position: 'relative',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              animation: playing ? 'pulseGlow 2.5s ease-in-out infinite' : 'none'
+              animation: isPlaying ? 'pulseGlow 2.5s ease-in-out infinite' : 'none'
             }}>
-              {!imageUrl && <div style={{ fontSize: 44, animation: playing ? 'rotatingCover 4s linear infinite' : 'none' }}>🎵</div>}
+              {!imageUrl && <div style={{ fontSize: 44, animation: isPlaying ? 'rotatingCover 4s linear infinite' : 'none' }}>🎵</div>}
             </div>
 
             {/* Info Area */}
