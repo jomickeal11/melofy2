@@ -15,10 +15,10 @@ export const PlayerProvider = ({ children }) => {
       const audio = new Audio()
       audio.preload = 'metadata'
       audioRef.current = audio
-      
+
       const updateProgress = () => {
         let d = audio.duration
-        
+
         // Si la durée est Infinity (souvent sur iPhone/AI33), on essaie de la récupérer
         if (d === Infinity && currentSong?.duration > 0) {
           d = currentSong.duration
@@ -81,7 +81,7 @@ export const PlayerProvider = ({ children }) => {
       // MediaSession setup
       if ('mediaSession' in navigator) {
         navigator.mediaSession.setActionHandler('play', () => {
-          audio.play().catch(() => {})
+          audio.play().catch(() => { })
         })
         navigator.mediaSession.setActionHandler('pause', () => {
           audio.pause()
@@ -117,7 +117,7 @@ export const PlayerProvider = ({ children }) => {
         const audio = audioRef.current;
         let d = audio.duration;
         const c = audio.currentTime;
-        
+
         // Fallback pour durée Infinity
         if (d === Infinity && currentSong?.duration > 0) {
           d = currentSong.duration
@@ -174,7 +174,7 @@ export const PlayerProvider = ({ children }) => {
       setDuration(0)
       setCurrentTime(0)
       setProgress(0)
-      
+
       audioRef.current.src = song.audio_url || song.audio
       audioRef.current.load()
       audioRef.current.play().catch(e => {
@@ -190,6 +190,15 @@ export const PlayerProvider = ({ children }) => {
       const nextSong = playlist[nextIndex]
       setCurrentIndex(nextIndex)
       playSong(nextSong, playlist)
+    }
+  }
+
+  const playPrevious = () => {
+    if (playlist.length > 0 && currentIndex > 0) {
+      const prevIndex = currentIndex - 1
+      const prevSong = playlist[prevIndex]
+      setCurrentIndex(prevIndex)
+      playSong(prevSong, playlist)
     }
   }
 
@@ -227,9 +236,9 @@ export const PlayerProvider = ({ children }) => {
   }
 
   return (
-    <PlayerContext.Provider value={{ 
-      currentSong, isPlaying, progress, duration, currentTime, playlist, 
-      playSong, togglePlay, stopPlayer, seek, playNext 
+    <PlayerContext.Provider value={{
+      currentSong, isPlaying, progress, duration, currentTime, playlist, currentIndex,
+      playSong, togglePlay, stopPlayer, seek, playNext, playPrevious
     }}>
       {children}
     </PlayerContext.Provider>

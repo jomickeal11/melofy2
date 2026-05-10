@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { getPublicSong } from '../../lib/song-service'
+import { usePlayer } from '../../context/PlayerContext'
 
 export async function getServerSideProps(context) {
   const { id } = context.params
@@ -54,14 +55,11 @@ export async function getServerSideProps(context) {
 }
 
 export default function SongSharePage({ song, appUrl, error }) {
+  const { currentSong, isPlaying, progress, duration, currentTime, playSong, seek, playNext, playPrevious, playlist, currentIndex } = usePlayer()
   const [hasMounted, setHasMounted] = useState(false)
-  const [playing, setPlaying] = useState(false)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(0)
   const [copied, setCopied] = useState(false)
   const [volume, setVolume] = useState(1)
   const [lang, setLang] = useState('FR')
-  const audioRef = useRef(null)
 
   useEffect(() => {
     setHasMounted(true)
@@ -87,9 +85,7 @@ export default function SongSharePage({ song, appUrl, error }) {
   const handleVolumeChange = (e) => {
     const val = parseFloat(e.target.value)
     setVolume(val)
-    if (audioRef.current) {
-      audioRef.current.volume = val
-    }
+    // Le volume global n'est pas encore dans le contexte, mais on pourra l'ajouter plus tard
   }
 
   let imageUrl = song?.image_url || '';
@@ -99,43 +95,6 @@ export default function SongSharePage({ song, appUrl, error }) {
     if (closingIdx !== -1) {
       if (!imageUrl) imageUrl = rawLyrics.substring(7, closingIdx);
     }
-  }
-
-  const updateDuration = () => {
-    if (audioRef.current && audioRef.current.duration && audioRef.current.duration !== Infinity && !isNaN(audioRef.current.duration)) {
-      setDuration(audioRef.current.duration)
-    }
-  }
-
-  const togglePlay = () => {
-    if (!audioRef.current) return
-    if (playing) {
-      audioRef.current.pause()
-    } else {
-      audioRef.current.play()
-    }
-    setPlaying(!playing)
-  }
-
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      setCurrentTime(audioRef.current.currentTime)
-      if (!duration || duration === Infinity || isNaN(duration)) {
-        updateDuration()
-      }
-    }
-  }
-
-  const handleSeek = (e) => {
-    if (!audioRef.current) return
-    const currentDuration = duration || audioRef.current.duration
-    if (!currentDuration || currentDuration === Infinity || isNaN(currentDuration)) return
-    const bounds = e.currentTarget.getBoundingClientRect()
-    const x = e.clientX - bounds.left
-    const percentage = Math.max(0, Math.min(1, x / bounds.width))
-    const newTime = percentage * currentDuration
-    audioRef.current.currentTime = newTime
-    setCurrentTime(newTime)
   }
 
   const formatTime = (time) => {
@@ -261,28 +220,76 @@ export default function SongSharePage({ song, appUrl, error }) {
             {/* Controls */}
             {hasMounted && (
               <div style={{ width: '100%', maxWidth: 500, display: 'flex', flexDirection: 'column', gap: 20 }}>
-                {/* Audio Engine */}
-                {song.audio_url && (
-                  <audio ref={audioRef} src={song.audio_url} onEnded={() => setPlaying(false)} onTimeUpdate={handleTimeUpdate} onCanPlay={updateDuration} />
-                )}
-                
                 {/* Scrubber */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                   <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', minWidth: 32, fontVariantNumeric: 'tabular-nums' }}>{formatTime(currentTime)}</span>
-                  <div onClick={handleSeek} style={{ flex: 1, height: 4, background: 'rgba(255,255,255,0.08)', borderRadius: 2, cursor: 'pointer', position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: 0, left: 0, height: '100%', background: '#6C63FF', borderRadius: 2, width: `${duration ? (currentTime / duration) * 100 : 0}%` }} />
+                  <div onClick={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    const x = e.clientX - rect.left
+                    const percent = (x / rect.width) * 100
+                    seek(percent)
+                  }} style={{ flex: 1, height: 4, background: 'rgba(255,255,255,0.08)', borderRadius: 2, cursor: 'pointer', position: 'relative' }}>
+                    <div style={{ position: 'absolute', top: 0, left: 0, height: '100%', background: '#6C63FF', borderRadius: 2, width: `${progress}%` }} />
                   </div>
                   <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', minWidth: 32, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>{formatTime(duration)}</span>
                 </div>
 
-                {/* Play/Pause & Volume */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
-                  <button onClick={togglePlay} disabled={!song.audio_url} style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, #6C63FF, #a855f7)', border: 'none', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: song.audio_url ? 'pointer' : 'default', transition: 'transform 0.15s' }}>
-                    {playing ? <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg> : <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 3 }}><polygon points="5,3 19,12 5,21" /></svg>}
-                  </button>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', padding: '8px 16px', borderRadius: 20 }}>
+                {/* Play/Pause & Navigation & Volume */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 24, alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+                    {/* Previous Button */}
+                    <button 
+                      onClick={playPrevious}
+                      disabled={!playlist || currentIndex <= 0}
+                      style={{ 
+                        width: 48, height: 48, borderRadius: '50%', 
+                        background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+                        color: (playlist && currentIndex > 0) ? '#fff' : 'rgba(255,255,255,0.2)', 
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                        cursor: (playlist && currentIndex > 0) ? 'pointer' : 'default',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                    </button>
+
+                    {/* Main Play/Pause */}
+                    <button onClick={() => playSong(song)} style={{ 
+                      width: 80, height: 80, borderRadius: '50%', 
+                      background: 'linear-gradient(135deg, #6C63FF, #a855f7)', 
+                      border: 'none', color: '#fff', display: 'flex', 
+                      alignItems: 'center', justifyContent: 'center', 
+                      cursor: 'pointer', transition: 'transform 0.15s',
+                      boxShadow: '0 10px 30px rgba(108, 99, 255, 0.3)'
+                    }}>
+                      {(isPlaying && currentSong?.id === song.id) ? (
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
+                      ) : (
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 4 }}><polygon points="5,3 19,12 5,21" /></svg>
+                      )}
+                    </button>
+
+                    {/* Next Button */}
+                    <button 
+                      onClick={playNext}
+                      disabled={!playlist || currentIndex >= playlist.length - 1}
+                      style={{ 
+                        width: 48, height: 48, borderRadius: '50%', 
+                        background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+                        color: (playlist && currentIndex < playlist.length - 1) ? '#fff' : 'rgba(255,255,255,0.2)', 
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                        cursor: (playlist && currentIndex < playlist.length - 1) ? 'pointer' : 'default',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                    </button>
+                  </div>
+
+                  {/* Volume Control */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', padding: '8px 16px', borderRadius: 20 }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /></svg>
-                    <input type="range" min="0" max="1" step="0.01" value={volume} onChange={handleVolumeChange} style={{ WebkitAppearance: 'none', width: 80, height: 4, background: 'rgba(255,255,255,0.1)', borderRadius: 2, outline: 'none' }} />
+                    <input type="range" min="0" max="1" step="0.01" value={volume} onChange={handleVolumeChange} style={{ WebkitAppearance: 'none', width: 100, height: 4, background: 'rgba(255,255,255,0.1)', borderRadius: 2, outline: 'none' }} />
                   </div>
                 </div>
 
