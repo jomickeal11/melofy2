@@ -64,7 +64,7 @@ export default function InvitePage() {
       <div style={{ display: 'flex', minHeight: '100vh', background: '#0F172A' }}>
         <Sidebar user={user} />
 
-        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-10 pb-player-safe">
+        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-10">
           <div className="max-w-[800px] mx-auto">
 
             <div style={{ marginBottom: 40 }}>

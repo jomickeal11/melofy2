@@ -127,7 +127,7 @@ export default function Home() {
       <div style={{ display: 'flex', minHeight: '100dvh', background: '#0F172A' }}>
         <Sidebar />
 
-        <main className="flex-1 overflow-y-auto adaptive-px adaptive-py pb-player-safe relative">
+        <main className="flex-1 overflow-y-auto adaptive-px adaptive-py relative">
           
           {/* Gift Banner */}
           {(giftActive && !dismissed) && (

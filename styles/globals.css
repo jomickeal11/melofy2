@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -102,12 +102,11 @@ button, a {
 }
 
 .pb-player-safe {
-    padding-bottom: 220px !important;
+    padding-bottom: 160px !important;
 }
 
 @media (min-width: 769px) {
     .pb-player-safe {
-        padding-bottom: 150px !important;
+        padding-bottom: 100px !important;
     }
 }
-
