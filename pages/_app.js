@@ -39,10 +39,27 @@ export default function App({ Component, pageProps }) {
     checkUser()
 
     // 2. Écouter les changements d'état (connexion/déconnexion)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      const currentUser = session?.user || null
+      setUser(currentUser)
       setAuthLoading(false)
+
+      // Synchroniser le profil si on vient de se connecter
+      if (event === 'SIGNED_IN' && currentUser) {
+        syncProfile(currentUser)
+      }
     })
+
+    async function syncProfile(user) {
+      const { data: profile } = await supabase.from('profiles').select('avatar_url').eq('id', user.id).single()
+      
+      const googleAvatar = user.user_metadata?.avatar_url || user.user_metadata?.picture
+      
+      // Si on a une image Google mais pas d'image dans le profil Melofy, on met à jour
+      if (googleAvatar && !profile?.avatar_url) {
+        await supabase.from('profiles').update({ avatar_url: googleAvatar }).eq('id', user.id)
+      }
+    }
 
     return () => subscription.unsubscribe()
   }, [])

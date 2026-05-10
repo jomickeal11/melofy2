@@ -70,7 +70,7 @@ export default function TermsPage() {
               }}>
                 {lang === 'FR' ? 'Conditions' : 'Terms'}
               </div>
-              <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 36, color: '#fff', margin: '0 0 10px 0' }}>
+              <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 26, color: '#fff', margin: '0 0 10px 0', letterSpacing: '-0.02em' }}>
                 {lang === 'FR' ? "Conditions d'Utilisation" : 'Terms of Use'}
               </h1>
               <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, margin: 0 }}>
@@ -83,12 +83,12 @@ export default function TermsPage() {
               
               <div style={{ 
                 background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', 
-                borderRadius: 18, padding: '28px 32px'
+                borderRadius: 18, padding: '20px 24px'
               }}>
-                <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 18, color: '#fff', marginBottom: 14 }}>
+                <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, color: '#fff', marginBottom: 12 }}>
                   {lang === 'FR' ? '1. Acceptation des conditions' : '1. Acceptance of terms'}
                 </h2>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, margin: 0 }}>
                   {lang === 'FR'
                     ? 'En utilisant les services de Melofy, vous acceptez d\'être lié par les présentes Conditions d\'Utilisation. Si vous n\'êtes pas d\'accord, veuillez cesser d\'utiliser nos services.'
                     : 'By using the services of Melofy, you agree to be bound by these Terms of Use. If you do not agree, please stop using our services.'}
@@ -102,7 +102,7 @@ export default function TermsPage() {
                 <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 18, color: '#fff', marginBottom: 14 }}>
                   {lang === 'FR' ? '2. Utilisation du service & Propriété' : '2. Use of the service & Ownership'}
                 </h2>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, margin: 0 }}>
                   {lang === 'FR'
                     ? 'Vous êtes entièrement propriétaire des chansons que vous générez avec Melofy. Cependant, vous êtes seul responsable du texte et du contenu fourni lors de l\'envoi des prompts. Vous vous engagez à ne pas envoyer de contenus haineux, diffamatoires ou enfreignant des droits de propriété intellectuelle existants.'
                     : 'You fully own the songs you generate with Melofy. However, you are solely responsible for the text and content provided when sending prompts. You agree not to submit hateful, defamatory content, or content that violates existing intellectual property rights.'}
@@ -116,7 +116,7 @@ export default function TermsPage() {
                 <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 18, color: '#fff', marginBottom: 14 }}>
                   {lang === 'FR' ? '3. Achats de crédits' : '3. Credit purchases'}
                 </h2>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, margin: 0 }}>
                   {lang === 'FR'
                     ? 'Tous les achats de crédits sont définitifs et non remboursables, sauf en cas de dysfonctionnement technique avéré de la plateforme ou d\'erreur système.'
                     : 'All purchases of credits are final and non-refundable, except in the event of a proven technical malfunction of the platform or system error.'}
@@ -130,7 +130,7 @@ export default function TermsPage() {
                 <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 18, color: '#fff', marginBottom: 14 }}>
                   {lang === 'FR' ? '4. Modification des conditions' : '4. Modification of terms'}
                 </h2>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, margin: 0 }}>
                   {lang === 'FR'
                     ? 'Nous nous réservons le droit de modifier ces conditions à tout moment. Toute mise à jour sera notifiée par la modification de la date de "Dernière mise à jour".'
                     : 'We reserve the right to modify these terms at any time. Any update will be notified by modifying the "Last updated" date.'}

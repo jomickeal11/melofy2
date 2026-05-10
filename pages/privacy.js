@@ -70,7 +70,7 @@ export default function PrivacyPage() {
               }}>
                 {lang === 'FR' ? 'Confidentialité' : 'Privacy'}
               </div>
-              <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 36, color: '#fff', margin: '0 0 10px 0' }}>
+              <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 26, color: '#fff', margin: '0 0 10px 0', letterSpacing: '-0.02em' }}>
                 {lang === 'FR' ? 'Politique de Confidentialité' : 'Privacy Policy'}
               </h1>
               <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, margin: 0 }}>
@@ -83,12 +83,12 @@ export default function PrivacyPage() {
               
               <div style={{ 
                 background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', 
-                borderRadius: 18, padding: '28px 32px'
+                borderRadius: 18, padding: '20px 24px'
               }}>
-                <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 18, color: '#fff', marginBottom: 14 }}>
+                <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 16, color: '#fff', marginBottom: 12 }}>
                   {lang === 'FR' ? '1. Collecte des données personnelles' : '1. Collection of personal data'}
                 </h2>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, margin: 0 }}>
                   {lang === 'FR'
                     ? 'Nous collectons les informations que vous nous fournissez lors de votre inscription, telles que votre nom d\'utilisateur et votre adresse e-mail. Nous conservons également les chansons créées et les transactions liées à votre compte pour assurer le bon fonctionnement de Melofy.'
                     : 'We collect information that you provide to us upon registration, such as your username and email address. We also store generated songs and account-related transactions to ensure the proper functioning of Melofy.'}
@@ -102,10 +102,10 @@ export default function PrivacyPage() {
                 <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 18, color: '#fff', marginBottom: 14 }}>
                   {lang === 'FR' ? '2. Utilisation de vos données' : '2. Use of your data'}
                 </h2>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, margin: 0 }}>
                   {lang === 'FR' ? 'Vos données sont uniquement utilisées pour :' : 'Your data is only used to:'}
                 </p>
-                <ul style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.8, marginTop: 10, paddingLeft: 20 }}>
+                <ul style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, marginTop: 10, paddingLeft: 20 }}>
                   <li>{lang === 'FR' ? 'Gérer votre compte et vos crédits de création' : 'Manage your account and creation credits'}</li>
                   <li>{lang === 'FR' ? 'Traiter vos demandes d\'assistance' : 'Process your support requests'}</li>
                   <li>{lang === 'FR' ? 'Améliorer l\'expérience utilisateur et les fonctionnalités de Melofy' : 'Improve user experience and Melofy features'}</li>
@@ -119,7 +119,7 @@ export default function PrivacyPage() {
                 <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 18, color: '#fff', marginBottom: 14 }}>
                   {lang === 'FR' ? '3. Protection des données' : '3. Data Protection'}
                 </h2>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, margin: 0 }}>
                   {lang === 'FR'
                     ? 'Nous mettons en œuvre des mesures de sécurité pour protéger vos données contre tout accès non autorisé. Vos mots de passe et données personnelles sensibles sont stockés de manière chiffrée.'
                     : 'We implement security measures to protect your data against unauthorized access. Your passwords and sensitive personal data are stored in encrypted format.'}
@@ -133,7 +133,7 @@ export default function PrivacyPage() {
                 <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: 18, color: '#fff', marginBottom: 14 }}>
                   {lang === 'FR' ? '4. Vos droits' : '4. Your Rights'}
                 </h2>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, margin: 0 }}>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6, margin: 0 }}>
                   {lang === 'FR'
                     ? 'Vous disposez d\'un droit d\'accès, de rectification et de suppression de vos données personnelles. Pour exercer ces droits, vous pouvez nous contacter via notre page de Support ou supprimer votre compte directement depuis les paramètres de votre profil.'
                     : 'You have a right to access, rectify, and delete your personal data. To exercise these rights, you can contact us via our Support page or delete your account directly from your profile settings.'}
