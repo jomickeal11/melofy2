@@ -98,7 +98,7 @@ export default function App({ Component, pageProps }) {
         }
       }} />
       <Component {...pageProps} />
-      {router.pathname !== '/create' && router.pathname !== '/' && <Player />}
+      <Player />
       <GenerationIndicator />
     </PlayerProvider>
     </GenerationProvider>
