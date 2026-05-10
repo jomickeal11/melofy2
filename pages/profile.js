@@ -114,7 +114,7 @@ export default function ProfilePage() {
             <div style={{ display: 'flex', minHeight: '100vh', background: '#0F172A' }}>
                 <Sidebar user={user} profile={profile} />
 
-                <main style={{ flex: 1, minWidth: 0, overflowY: 'auto', paddingBottom: 100 }}>
+                <main className="pb-player-safe" style={{ flex: 1, minWidth: 0, overflowY: 'auto' }}>
                     <div style={{ maxWidth: 500, margin: '0 auto', padding: '40px 20px' }}>
                         
                         {/* ── Header ── */}

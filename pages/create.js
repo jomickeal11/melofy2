@@ -259,7 +259,7 @@ export default function CreatePage() {
           </Link>
         </header>
 
-        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-10 pb-40 relative">
+        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-10 pb-player-safe relative">
           <div style={{ maxWidth: 860, margin: '0 auto', position: 'relative', zIndex: 1 }}>
 
             {isMaintenance && (

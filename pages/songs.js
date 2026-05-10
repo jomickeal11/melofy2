@@ -191,7 +191,7 @@ export default function SongsPage() {
       <div style={{ display: 'flex', minHeight: '100vh', background: '#0F172A' }}>
         <Sidebar />
 
-        <main className="flex-1 overflow-y-auto adaptive-px adaptive-py pb-40 relative">
+        <main className="flex-1 overflow-y-auto adaptive-px adaptive-py pb-player-safe relative">
           <div className="max-w-[1000px] mx-auto relative z-[1]">
 
             {/* Header */}

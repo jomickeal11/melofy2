@@ -187,7 +187,7 @@ export default function PricingPage() {
       <div style={{ display: 'flex', minHeight: '100vh', background: '#0F172A', color: '#fff', fontFamily: 'Inter, sans-serif' }}>
         <Sidebar />
 
-        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-10 pb-20">
+        <main className="flex-1 overflow-y-auto px-4 md:px-8 py-10 pb-player-safe">
           <div className="max-w-[1100px] mx-auto text-center">
 
             {/* Header */}
