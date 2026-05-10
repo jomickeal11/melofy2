@@ -28,7 +28,7 @@ export default function Player() {
   return (
     <div className="player-pill" style={{
       position: 'fixed', 
-      bottom: isMainPage ? 'calc(env(safe-area-inset-bottom, 0px) + 68px)' : '20px',
+      bottom: isMainPage ? 'calc(env(safe-area-inset-bottom, 0px) + 80px)' : '20px',
       left: 0, right: 0,
       margin: '0 auto',
       width: 'calc(100% - 24px)',
