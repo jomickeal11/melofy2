@@ -153,7 +153,7 @@ export const PlayerProvider = ({ children }) => {
   const playSong = (song, currentPlaylist = []) => {
     if (!audioRef.current || !song) return
 
-    if (currentPlaylist.length > 0) {
+    if (currentPlaylist && Array.isArray(currentPlaylist) && currentPlaylist.length > 0) {
       setPlaylist(currentPlaylist)
       const index = currentPlaylist.findIndex(s => s.id === song.id)
       setCurrentIndex(index)

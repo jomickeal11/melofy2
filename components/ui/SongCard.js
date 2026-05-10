@@ -19,7 +19,34 @@ export default function SongCard({ song, onDelete, isSelected, onSelect, onDownl
 
   const toggle = () => {
     if (!localSong.audio_url) return
-    playSong(localSong, playlist)
+    playSong(localSong, playlist || [])
+  }
+
+  const handleSaveTitle = async () => {
+    if (!titleInput.trim()) return
+    setSavingTitle(true)
+    try {
+      const { data: { session } } = await import('../../lib/supabase').then(m => m.supabase.auth.getSession())
+      const res = await fetch('/api/save-song', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token}`
+        },
+        body: JSON.stringify({ 
+          songId: localSong.id, 
+          titre: titleInput 
+        })
+      })
+      if (!res.ok) throw new Error('Erreur')
+      setLocalSong({ ...localSong, title: titleInput })
+      setIsEditingTitle(false)
+      toast.success(lang === 'FR' ? 'Titre mis à jour' : 'Title updated')
+    } catch (e) {
+      toast.error(lang === 'FR' ? 'Erreur lors de la mise à jour' : 'Update error')
+    } finally {
+      setSavingTitle(false)
+    }
   }
 
   const formatTime = (time) => {
