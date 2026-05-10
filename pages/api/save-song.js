@@ -3,8 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Méthode non autorisée' })
 
-  const { track, metadata } = req.body;
-  if (!track || !metadata) return res.status(400).json({ error: 'Données manquantes' })
+  const { track, metadata, songId } = req.body;
+  if (!songId && (!track || !metadata)) return res.status(400).json({ error: 'Données manquantes' })
 
   try {
     const authHeader = req.headers.authorization || ''
@@ -47,41 +47,53 @@ export default async function handler(req, res) {
     }
     // --------------------------------------
 
-    const { track, metadata, titre } = req.body;
-    const finalTitle = titre || track?.title || metadata?.titre || "Chanson générée";
+    const { titre } = req.body;
+    
+    // Déterminer si le titre actuel est un titre par défaut du système
+    const defaultTitleSimple = metadata?.occasion ? `Chanson pour ${metadata.occasion}` : null;
+    const defaultTitleAvance = metadata?.style ? `Chanson ${metadata.style}` : null;
+    const isSystemDefault = !titre || titre === defaultTitleSimple || titre === defaultTitleAvance || titre === 'Chanson générée';
 
-    const songId = req.body.songId;
-    let song, dbError;
+    // Si c'est un titre par défaut et qu'on a un titre de l'IA, on prend celui de l'IA
+    let finalTitle = titre;
+    if (isSystemDefault && track?.title && track.title !== 'Untitled' && track.title !== 'Nouvelle chanson' && track.title !== 'Chanson générée') {
+      finalTitle = track.title;
+    } else if (!finalTitle) {
+      finalTitle = track?.title || metadata?.titre || "Chanson générée";
+    }
 
     const imageUrl = track?.image_url || '';
-    const finalLyrics = imageUrl ? `[IMAGE:${imageUrl}]${metadata?.paroles || ''}` : (metadata?.paroles || '');
+    const finalLyrics = (track || metadata) 
+      ? (imageUrl ? `[IMAGE:${imageUrl}]${metadata?.paroles || ''}` : (metadata?.paroles || ''))
+      : undefined;
+
+    let song, dbError;
 
     if (songId) {
+      const updatePayload = {
+        title: finalTitle,
+        status: 'ready',
+        is_public: true,
+      };
+      
+      if (track?.audio_url) updatePayload.audio_url = track.audio_url;
+      if (finalLyrics !== undefined) updatePayload.lyrics = finalLyrics;
+      if (imageUrl) updatePayload.image_url = imageUrl;
+      if (track?.id) updatePayload.suno_job_id = track.id;
+
       let res = await supabaseAdmin
         .from('songs')
-        .update({
-          title: finalTitle,
-          status: 'ready',
-          audio_url: track.audio_url,
-          lyrics: finalLyrics,
-          image_url: imageUrl,
-          suno_job_id: track.id || '',
-          is_public: true,
-        })
+        .update(updatePayload)
         .eq('id', songId)
         .select()
         .single();
         
       if (res.error && res.error.message?.includes('column')) {
+        // Fallback si la colonne image_url n'existe pas
+        delete updatePayload.image_url;
         res = await supabaseAdmin
           .from('songs')
-          .update({
-            title: finalTitle,
-            status: 'ready',
-            audio_url: track.audio_url,
-            lyrics: finalLyrics,
-            suno_job_id: track.id || '',
-          })
+          .update(updatePayload)
           .eq('id', songId)
           .select()
           .single();

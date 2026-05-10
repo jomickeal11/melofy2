@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 import toast from 'react-hot-toast'
 import { useGeneration } from '../context/GenerationContext'
+import { usePlayer } from '../context/PlayerContext'
 
 const STYLES = [
   { id: 'Afrobeat', emoji: '🥁', name_fr: 'Afrobeat', name_en: 'Afrobeat' },
@@ -67,6 +68,7 @@ export default function CreatePage() {
     isGenerating, progress, songId: contextSongId, tracks: contextTracks,
     status: contextStatus, metadata, setMetadata, startGeneration, resetGeneration
   } = useGeneration()
+  const { currentSong, isPlaying, playSong } = usePlayer()
   const [isMaintenance, setIsMaintenance] = useState(false)
   const [showComposerHelper, setShowComposerHelper] = useState(false)
   const isSubmitting = useRef(false)
@@ -717,7 +719,25 @@ export default function CreatePage() {
                           <div style={{ fontSize: 16, fontWeight: 600, color: '#fff' }}>{track.title || metadata?.titre || 'Chanson générée'}</div>
                         </div>
                       </div>
-                      <audio controls src={track.audio_url} style={{ width: '100%', height: 40, outline: 'none' }} />
+                      
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <button 
+                          onClick={() => playSong(track, tracks)}
+                          style={{
+                            flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                            padding: '12px', borderRadius: 12, background: 'rgba(255,255,255,0.05)',
+                            border: `1.5px solid ${currentSong?.id === track.id ? '#6C63FF' : 'rgba(255,255,255,0.1)'}`,
+                            color: '#fff', cursor: 'pointer', transition: 'all 0.2s'
+                          }}
+                        >
+                          {currentSong?.id === track.id && isPlaying ? (
+                            <><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> {lang === 'FR' ? 'Pause' : 'Pause'}</>
+                          ) : (
+                            <><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg> {lang === 'FR' ? 'Écouter' : 'Listen'}</>
+                          )}
+                        </button>
+                      </div>
+
                       <button onClick={() => handleSelectTrack(track)} style={{
                         width: '100%', padding: '14px', borderRadius: 50, border: `1px solid ${BRAND_BORDER}`, cursor: 'pointer',
                         background: BRAND_BG, color: '#a78bfa', fontWeight: 600, fontSize: 14, transition: 'all 0.2s'

@@ -15,7 +15,7 @@ export default function Player() {
   if (!mounted || !currentSong) return null
 
   // Liste STRICTE des pages qui affichent la barre de navigation mobile
-  const isMainPage = ['/dashboard', '/songs', '/profile', '/payments', '/invite', '/pricing'].includes(router.pathname)
+  const isMainPage = ['/dashboard', '/songs', '/profile', '/payments', '/invite', '/pricing', '/create'].includes(router.pathname)
 
   // Si on n'est pas sur une page de l'application principale (avec BottomNav),
   // on masque l'interface visuelle du lecteur.

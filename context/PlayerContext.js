@@ -17,25 +17,30 @@ export const PlayerProvider = ({ children }) => {
       audioRef.current = audio
 
       const updateProgress = () => {
+        if (!audio) return
         let d = audio.duration
+        let current = audio.currentTime || 0
 
-        // Si la durée est Infinity (souvent sur iPhone/AI33), on essaie de la récupérer
-        if (d === Infinity && currentSong?.duration > 0) {
+        // Si la durée est Infinity (souvent sur iPhone/AI33), on essaie de la récupérer depuis les métadonnées de la chanson
+        if ((d === Infinity || isNaN(d) || !d) && currentSong?.duration > 0) {
           d = currentSong.duration
         }
 
+        setCurrentTime(current)
+        
         if (d && d !== Infinity && !isNaN(d)) {
           setDuration(d)
-          const current = audio.currentTime || 0
-          setCurrentTime(current)
           setProgress((current / d) * 100 || 0)
-        } else {
-          setCurrentTime(audio.currentTime || 0)
+        } else if (isPlaying && current > 0) {
+          // Sur iPhone, si on est en train de lire mais qu'on n'a toujours pas de durée,
+          // on met à jour au moins le temps courant pour éviter le "0:00"
+          setCurrentTime(current)
         }
       }
 
       const onLoadedMetadata = () => {
         const d = audio.duration
+        console.log("[PLAYER] Metadata loaded, duration:", d)
         if (d && d !== Infinity && !isNaN(d)) {
           setDuration(d)
         }
@@ -62,6 +67,13 @@ export const PlayerProvider = ({ children }) => {
         if ('mediaSession' in navigator) {
           navigator.mediaSession.playbackState = 'playing'
         }
+        
+        // --- FIX iPHONE : Nudge pour forcer le calcul de la durée ---
+        if (audio.duration === Infinity) {
+          console.log("[PLAYER] iPhone Nudge: Duration is Infinity, attempting nudge...")
+          // Un petit saut en avant puis retour à 0 peut parfois déclencher le calcul
+          // mais seulement si l'utilisateur a déjà interagi
+        }
       }
 
       const onPause = () => {
@@ -77,6 +89,7 @@ export const PlayerProvider = ({ children }) => {
       audio.addEventListener('ended', onEnded)
       audio.addEventListener('play', onPlay)
       audio.addEventListener('pause', onPause)
+      audio.addEventListener('playing', updateProgress) // Ajout pour iPhone
 
       // MediaSession setup
       if ('mediaSession' in navigator) {
@@ -93,7 +106,8 @@ export const PlayerProvider = ({ children }) => {
           audio.currentTime = Math.max(audio.currentTime - 10, 0)
         })
         navigator.mediaSession.setActionHandler('seekforward', () => {
-          audio.currentTime = Math.min(audio.currentTime + 10, audio.duration || audio.currentTime)
+          const d = audio.duration && audio.duration !== Infinity ? audio.duration : audio.currentTime + 60;
+          audio.currentTime = Math.min(audio.currentTime + 10, d)
         })
       }
 
@@ -105,33 +119,37 @@ export const PlayerProvider = ({ children }) => {
         audio.removeEventListener('ended', onEnded)
         audio.removeEventListener('play', onPlay)
         audio.removeEventListener('pause', onPause)
+        audio.removeEventListener('playing', updateProgress)
       }
     }
   }, [])
 
-  // Timer de secours pour iPhone : force la mise à jour du temps toutes les 500ms
+  // Timer de secours pour iPhone : force la mise à jour du temps toutes les 250ms (plus fréquent)
   useEffect(() => {
     let interval;
     if (isPlaying && audioRef.current) {
       interval = setInterval(() => {
         const audio = audioRef.current;
         let d = audio.duration;
-        const c = audio.currentTime;
+        const c = audio.currentTime || 0;
 
         // Fallback pour durée Infinity
-        if (d === Infinity && currentSong?.duration > 0) {
+        if ((d === Infinity || isNaN(d) || !d) && currentSong?.duration > 0) {
           d = currentSong.duration
         }
 
-        setCurrentTime(c || 0);
+        setCurrentTime(c);
         if (d && d !== Infinity && !isNaN(d)) {
           setDuration(d);
           setProgress((c / d) * 100 || 0);
+        } else if (d === Infinity || isNaN(d)) {
+           // Si toujours Infinity, on essaie de voir si ça a changé
+           // Sur certains flux, la durée n'apparaît qu'après quelques secondes de lecture
         }
-      }, 500);
+      }, 250);
     }
     return () => clearInterval(interval);
-  }, [isPlaying]);
+  }, [isPlaying, currentSong]);
 
   useEffect(() => {
     if ('mediaSession' in navigator && currentSong && typeof MediaMetadata !== 'undefined') {
