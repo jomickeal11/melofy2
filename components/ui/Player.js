@@ -26,10 +26,13 @@ export default function Player() {
   const hasNext = playlist && playlist.length > 0 && playlist.findIndex(s => s.id === currentSong.id) < playlist.length - 1
 
   return (
-    <div className={`player-container ${isMainPage ? 'has-mobile-nav' : ''}`} style={{
-      position: 'fixed', bottom: isMainPage ? 'calc(env(safe-area-inset-bottom, 0px) + 68px)' : '20px', 
-      left: '50%', transform: 'translateX(-50%)',
-      width: 'calc(100% - 24px)', maxWidth: 500,
+    <div className="player-pill" style={{
+      position: 'fixed', 
+      bottom: isMainPage ? 'calc(env(safe-area-inset-bottom, 0px) + 68px)' : '20px',
+      left: 0, right: 0,
+      margin: '0 auto',
+      width: 'calc(100% - 24px)',
+      maxWidth: 500,
       background: 'rgba(15, 23, 42, 0.92)', backdropFilter: 'blur(24px)',
       border: '1px solid rgba(255, 255, 255, 0.1)',
       padding: '8px 12px 8px 16px', zIndex: 1000,
