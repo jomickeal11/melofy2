@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { supabase } from '../lib/supabase'
 
 export default function LandingPage() {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -8,6 +9,7 @@ export default function LandingPage() {
   const [langDropdownOpen, setLangDropdownOpen] = useState(false)
   const [currency, setCurrency] = useState('XOF')
   const [curDropdownOpen, setCurDropdownOpen] = useState(false)
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     const saved = localStorage.getItem('melofy_lang') || 'FR'
@@ -27,6 +29,18 @@ export default function LandingPage() {
       } catch (err) { console.error(err) }
     }
     detectGeo()
+
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setUser(session?.user || null)
+    }
+    checkUser()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null)
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
   const formatPrice = (priceInXof, cur) => {
@@ -87,12 +101,12 @@ export default function LandingPage() {
               onMouseLeave={e => e.currentTarget.style.opacity = '0.8'}>
               Blog
             </Link>
-            <Link href="/login" style={{ color: '#fff', textDecoration: 'none', fontSize: 14, fontWeight: 500, opacity: 0.8 }}
+            <Link href={user ? "/dashboard" : "/login"} style={{ color: '#fff', textDecoration: 'none', fontSize: 14, fontWeight: 500, opacity: 0.8 }}
               onMouseEnter={e => e.currentTarget.style.opacity = '1'}
               onMouseLeave={e => e.currentTarget.style.opacity = '0.8'}>
-              {lang === 'FR' ? 'Connexion' : 'Log in'}
+              {lang === 'FR' ? (user ? 'Mon Compte' : 'Connexion') : (user ? 'My Account' : 'Log in')}
             </Link>
-            <Link href="/signup" className="hidden sm:flex" style={{ background: 'linear-gradient(135deg,#6C63FF,#a855f7)', color: '#fff', textDecoration: 'none', fontSize: 14, fontWeight: 600, padding: '12px 28px', borderRadius: 50, alignItems: 'center', gap: 6, transition: 'transform 0.2s, opacity 0.2s', boxShadow: '0 4px 14px rgba(108,99,255,0.3)' }}
+            <Link href={user ? "/create" : "/signup"} className="hidden sm:flex" style={{ background: 'linear-gradient(135deg,#6C63FF,#a855f7)', color: '#fff', textDecoration: 'none', fontSize: 14, fontWeight: 600, padding: '12px 28px', borderRadius: 50, alignItems: 'center', gap: 6, transition: 'transform 0.2s, opacity 0.2s', boxShadow: '0 4px 14px rgba(108,99,255,0.3)' }}
               onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
               onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
               {lang === 'FR' ? 'Commencer' : 'Start'} <span style={{ fontSize: 16 }}>→</span>
@@ -124,7 +138,7 @@ export default function LandingPage() {
             </p>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 20, zIndex: 1, flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Link href="/signup" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '18px 42px', borderRadius: 50, background: 'linear-gradient(135deg,#6C63FF,#a855f7)', color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: 18, boxShadow: '0 8px 32px rgba(108,99,255,0.35)', transition: 'transform 0.2s' }}
+              <Link href={user ? "/create" : "/signup"} style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '18px 42px', borderRadius: 50, background: 'linear-gradient(135deg,#6C63FF,#a855f7)', color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: 18, boxShadow: '0 8px 32px rgba(108,99,255,0.35)', transition: 'transform 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
                 {lang === 'FR' ? 'Créer ma chanson' : 'Create my song'} <span style={{ fontSize: 20 }}>→</span>
@@ -233,7 +247,7 @@ export default function LandingPage() {
                   <li>🎵 {lang === 'FR' ? 'Chansons en haute qualité' : 'High quality songs'}</li>
                   <li>📱 {lang === 'FR' ? 'Partage public dédié' : 'Dedicated public sharing'}</li>
                 </ul>
-                <Link href="/signup" style={{ padding: '14px 24px', borderRadius: 40, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#fff', textAlign: 'center', textDecoration: 'none', fontWeight: 600, fontSize: 14, transition: 'background 0.2s' }}
+                <Link href={user ? "/pricing" : "/signup"} style={{ padding: '14px 24px', borderRadius: 40, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#fff', textAlign: 'center', textDecoration: 'none', fontWeight: 600, fontSize: 14, transition: 'background 0.2s' }}
                   onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
                   onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.04)'}>
                   {lang === 'FR' ? 'Choisir ce pack' : 'Choose this pack'}
@@ -257,7 +271,7 @@ export default function LandingPage() {
                   <li>📱 {lang === 'FR' ? 'Partage public dédié' : 'Dedicated public sharing'}</li>
                   <li>🎁 {lang === 'FR' ? 'Économie par chanson' : 'Save per song'}</li>
                 </ul>
-                <Link href="/signup" style={{ padding: '14px 24px', borderRadius: 40, background: 'linear-gradient(135deg,#6C63FF,#a855f7)', color: '#fff', textAlign: 'center', textDecoration: 'none', fontWeight: 600, fontSize: 14, transition: 'transform 0.2s' }}
+                <Link href={user ? "/pricing" : "/signup"} style={{ padding: '14px 24px', borderRadius: 40, background: 'linear-gradient(135deg,#6C63FF,#a855f7)', color: '#fff', textAlign: 'center', textDecoration: 'none', fontWeight: 600, fontSize: 14, transition: 'transform 0.2s' }}
                   onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.02)'}
                   onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
                   {lang === 'FR' ? 'Prendre ce pack' : 'Get this pack'}
@@ -277,7 +291,7 @@ export default function LandingPage() {
                   <li>🎵 {lang === 'FR' ? 'Idéal pour grands événements' : 'Ideal for large events'}</li>
                   <li>📱 {lang === 'FR' ? 'Meilleur tarif / chanson' : 'Best price per song'}</li>
                 </ul>
-                <Link href="/signup" style={{ padding: '14px 24px', borderRadius: 40, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#fff', textAlign: 'center', textDecoration: 'none', fontWeight: 600, fontSize: 14, transition: 'background 0.2s' }}
+                <Link href={user ? "/pricing" : "/signup"} style={{ padding: '14px 24px', borderRadius: 40, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', color: '#fff', textAlign: 'center', textDecoration: 'none', fontWeight: 600, fontSize: 14, transition: 'background 0.2s' }}
                   onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
                   onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.04)'}>
                   {lang === 'FR' ? 'Prendre ce pack' : 'Get this pack'}

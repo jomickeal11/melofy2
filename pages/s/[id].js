@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import { getPublicSong, getDiscoverySongs } from '../../lib/song-service'
 import { usePlayer } from '../../context/PlayerContext'
+import { supabase } from '../../lib/supabase'
 
 export async function getServerSideProps(context) {
   const { id } = context.params
@@ -63,11 +64,24 @@ export default function SongSharePage({ song, recommendations, appUrl, error }) 
   const [hasMounted, setHasMounted] = useState(false)
   const [copied, setCopied] = useState(false)
   const [lang, setLang] = useState('FR')
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     setHasMounted(true)
     const saved = localStorage.getItem('melofy_lang') || 'FR'
     setLang(saved)
+
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setUser(session?.user || null)
+    }
+    checkUser()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null)
+    })
+
+    return () => subscription.unsubscribe()
   }, [song])
 
   if (error) {
@@ -167,12 +181,12 @@ export default function SongSharePage({ song, recommendations, appUrl, error }) 
             <span style={{ color: '#6C63FF', fontSize: 24 }}>♪</span>
             <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 20, color: '#fff', letterSpacing: '-0.02em' }}>melofy</span>
           </Link>
-          <Link href="/signup" style={{
+          <Link href={user ? "/create" : "/signup"} style={{
             fontSize: 13, fontWeight: 600, color: '#fff', textDecoration: 'none',
             background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
             padding: '8px 20px', borderRadius: 20, transition: 'background 0.2s'
           }}>
-            Créer ma chanson
+            {lang === 'FR' ? 'Créer ma chanson' : 'Create my song'}
           </Link>
         </header>
 

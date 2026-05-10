@@ -359,9 +359,6 @@ export default function CreatePage() {
                     ))}
                   </div>
                 </div>
-                <button onClick={handleNext} disabled={!occasion} style={{ marginTop: 8, width: '100%', padding: '13px', borderRadius: 50, border: 'none', cursor: !occasion ? 'not-allowed' : 'pointer', background: BRAND_GRAD, color: '#fff', fontWeight: 500, fontSize: 14, opacity: !occasion ? 0.35 : 1 }}>
-                  {lang === 'FR' ? 'Continuer →' : 'Continue →'}
-                </button>
               </div>
             )}
 
@@ -436,14 +433,6 @@ export default function CreatePage() {
                     ))}
                   </div>
                 </div>
-                <div style={{ display: 'flex', gap: 10 }}>
-                  <button onClick={handleBack} style={{ padding: '13px 20px', borderRadius: 50, background: 'none', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: 14 }}>
-                    {lang === 'FR' ? '← Retour' : '← Back'}
-                  </button>
-                  <button onClick={handleNext} disabled={!style} style={{ flex: 1, padding: '13px', borderRadius: 50, border: 'none', cursor: !style ? 'not-allowed' : 'pointer', background: BRAND_GRAD, color: '#fff', fontWeight: 500, fontSize: 14, opacity: !style ? 0.35 : 1 }}>
-                    {lang === 'FR' ? 'Continuer →' : 'Continue →'}
-                  </button>
-                </div>
               </div>
             )}
 
@@ -508,14 +497,6 @@ export default function CreatePage() {
                   </div>
                 </div>
                 {error && <div style={{ marginBottom: 16, padding: '12px 14px', borderRadius: 12, background: 'rgba(239,68,68,0.1)', color: '#f87171', fontSize: 13, border: '1px solid rgba(239,68,68,0.2)' }}>{error}</div>}
-                <div style={{ display: 'flex', gap: 10 }}>
-                  <button onClick={handleBack} disabled={loading} style={{ padding: '13px 20px', borderRadius: 50, background: 'none', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: 14 }}>
-                    {lang === 'FR' ? '← Retour' : '← Back'}
-                  </button>
-                  <button onClick={handleGenerate} disabled={isGenerating} style={{ flex: 1, padding: '13px', borderRadius: 50, border: 'none', cursor: isGenerating ? 'not-allowed' : 'pointer', background: BRAND_GRAD, color: '#fff', fontWeight: 500, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: isGenerating ? 0.7 : 1 }}>
-                    {isGenerating ? <><span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />{lang === 'FR' ? 'Génération...' : 'Generating...'}</> : (lang === 'FR' ? '✨ Générer ma chanson' : '✨ Generate my song')}
-                  </button>
-                </div>
               </div>
             )}
 
@@ -550,10 +531,6 @@ export default function CreatePage() {
                   />
                   <span style={{ position: 'absolute', bottom: 10, right: 12, fontSize: 11, color: 'rgba(255,255,255,0.25)' }}>{paroles.length}/1500</span>
                 </div>
-                <button onClick={handleNext} disabled={paroles.length < 10}
-                  style={{ marginTop: 8, width: '100%', padding: '13px', borderRadius: 50, border: 'none', cursor: paroles.length < 10 ? 'not-allowed' : 'pointer', background: BRAND_GRAD, color: '#fff', fontWeight: 500, fontSize: 14, opacity: paroles.length < 10 ? 0.35 : 1 }}>
-                  Continuer →
-                </button>
               </div>
             )}
 
@@ -656,10 +633,6 @@ export default function CreatePage() {
                     </div>
                   </div>
                 </div>
-                <div style={{ display: 'flex', gap: 10 }}>
-                  <button onClick={handleBack} style={{ padding: '13px 20px', borderRadius: 50, background: 'none', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: 14 }}>← Retour</button>
-                  <button onClick={handleNext} disabled={!style} style={{ flex: 1, padding: '13px', borderRadius: 50, border: 'none', cursor: !style ? 'not-allowed' : 'pointer', background: BRAND_GRAD, color: '#fff', fontWeight: 500, fontSize: 14, opacity: !style ? 0.35 : 1 }}>Continuer →</button>
-                </div>
               </div>
             )}
 
@@ -694,12 +667,6 @@ export default function CreatePage() {
                   </div>
                 </div>
                 {error && <div style={{ marginBottom: 16, padding: '12px 14px', borderRadius: 12, background: 'rgba(239,68,68,0.1)', color: '#f87171', fontSize: 13, border: '1px solid rgba(239,68,68,0.2)' }}>{error}</div>}
-                <div style={{ display: 'flex', gap: 10 }}>
-                  <button onClick={handleBack} disabled={isGenerating} style={{ padding: '13px 20px', borderRadius: 50, background: 'none', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: 14 }}>← Retour</button>
-                  <button onClick={handleGenerate} disabled={isGenerating} style={{ flex: 1, padding: '13px', borderRadius: 50, border: 'none', cursor: isGenerating ? 'not-allowed' : 'pointer', background: BRAND_GRAD, color: '#fff', fontWeight: 500, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: isGenerating ? 0.7 : 1 }}>
-                    {isGenerating ? <><span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />Démarrage...</> : '✨ Générer ma chanson'}
-                  </button>
-                </div>
               </div>
             )}
 
@@ -770,6 +737,63 @@ export default function CreatePage() {
 
           </div>
         </main>
+
+        {/* Fixed Action Bar at the Bottom */}
+        {step < 4 && (
+          <div style={{
+            position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 200,
+            background: 'rgba(15, 23, 42, 0.8)', backdropFilter: 'blur(16px)',
+            borderTop: '1px solid rgba(255,255,255,0.08)',
+            padding: '16px 20px calc(16px + env(safe-area-inset-bottom, 0px))',
+            display: 'flex', justifyContent: 'center'
+          }}>
+            <div style={{ width: '100%', maxWidth: 860, display: 'flex', gap: 12 }}>
+              {step > 1 && (
+                <button onClick={handleBack} disabled={isGenerating} style={{
+                  padding: '13px 24px', borderRadius: 50, background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)',
+                  cursor: 'pointer', fontSize: 14, fontWeight: 600, transition: 'all 0.2s'
+                }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}>
+                  {lang === 'FR' ? '← Retour' : '← Back'}
+                </button>
+              )}
+              
+              <button 
+                onClick={step === 3 ? handleGenerate : handleNext} 
+                disabled={
+                  (mode === 'simple' && step === 1 && !occasion) ||
+                  (mode === 'simple' && step === 2 && !style) ||
+                  (mode === 'avance' && step === 1 && paroles.length < 10) ||
+                  (mode === 'avance' && step === 2 && !style) ||
+                  isGenerating
+                }
+                style={{
+                  flex: 1, padding: '13px', borderRadius: 50, border: 'none',
+                  cursor: 'pointer', background: BRAND_GRAD, color: '#fff',
+                  fontWeight: 700, fontSize: 14, display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', gap: 8, boxShadow: '0 8px 24px rgba(108,99,255,0.3)',
+                  opacity: (
+                    (mode === 'simple' && step === 1 && !occasion) ||
+                    (mode === 'simple' && step === 2 && !style) ||
+                    (mode === 'avance' && step === 1 && paroles.length < 10) ||
+                    (mode === 'avance' && step === 2 && !style) ||
+                    isGenerating
+                  ) ? 0.35 : 1
+                }}
+              >
+                {step === 3 ? (
+                  isGenerating ? (
+                    <><span style={{ width: 14, height: 14, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} /> {lang === 'FR' ? 'Génération...' : 'Generating...'}</>
+                  ) : (
+                    lang === 'FR' ? '✨ Générer ma chanson' : '✨ Generate my song'
+                  )
+                ) : (
+                  lang === 'FR' ? 'Continuer →' : 'Continue →'
+                )}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
       <style dangerouslySetInnerHTML={{ __html: `@keyframes spin{to{transform:rotate(360deg)}}` }} />
 
