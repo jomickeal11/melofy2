@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
-import { getPublicSong } from '../../lib/song-service'
+import { getPublicSong, getDiscoverySongs } from '../../lib/song-service'
 import { usePlayer } from '../../context/PlayerContext'
 
 export async function getServerSideProps(context) {
@@ -37,9 +37,13 @@ export async function getServerSideProps(context) {
       }
     }
 
+    // On récupère aussi quelques chansons pour la découverte
+    const recommendations = await getDiscoverySongs(id, 5)
+
     return {
       props: {
         song,
+        recommendations,
         appUrl: process.env.NEXT_PUBLIC_APP_URL || ''
       }
     }
@@ -54,7 +58,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default function SongSharePage({ song, appUrl, error }) {
+export default function SongSharePage({ song, recommendations, appUrl, error }) {
   const { currentSong, isPlaying, progress, duration, currentTime, playSong, seek, playNext, playPrevious, playlist, currentIndex } = usePlayer()
   const [hasMounted, setHasMounted] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -65,7 +69,16 @@ export default function SongSharePage({ song, appUrl, error }) {
     setHasMounted(true)
     const saved = localStorage.getItem('melofy_lang') || 'FR'
     setLang(saved)
-  }, [])
+
+    // Initialiser la playlist si elle est vide ou si on arrive sur une nouvelle chanson de partage
+    if (song && (!playlist.length || !playlist.find(s => s.id === song.id))) {
+      const fullPlaylist = [song, ...(recommendations || [])]
+      // On ne joue pas automatiquement pour ne pas surprendre l'utilisateur, 
+      // mais on prépare la liste
+      const { playSong: silentInit } = usePlayer.getState ? { playSong: () => {} } : { playSong: null } 
+      // En fait on va juste utiliser playSong(song, fullPlaylist) au premier clic
+    }
+  }, [song])
 
   if (error) {
     return (
@@ -254,7 +267,7 @@ export default function SongSharePage({ song, appUrl, error }) {
                     </button>
 
                     {/* Main Play/Pause */}
-                    <button onClick={() => playSong(song)} style={{ 
+                    <button onClick={() => playSong(song, [song, ...(recommendations || [])])} style={{ 
                       width: 80, height: 80, borderRadius: '50%', 
                       background: 'linear-gradient(135deg, #6C63FF, #a855f7)', 
                       border: 'none', color: '#fff', display: 'flex', 
